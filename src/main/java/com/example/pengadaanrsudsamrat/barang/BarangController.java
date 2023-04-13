@@ -38,7 +38,7 @@ public class BarangController {
     }
 
     @PostMapping
-    public ResponseEntity<BarangDTO> saveBarang(@ModelAttribute BarangDTO barangDto, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<BarangDTO> saveBarang(@RequestBody BarangDTO barangDto, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         BarangModel barang = modelMapper.map(barangDto, BarangModel.class);
         if (barangDto.getVendor() != null) {
             VendorModel vendor = modelMapper.map(barangDto.getVendor(), VendorModel.class);
@@ -53,8 +53,11 @@ public class BarangController {
         return new ResponseEntity<>(savedBarangDto, HttpStatus.CREATED);
     }
 
+
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<BarangDTO> updateBarang(@PathVariable Long id, @ModelAttribute BarangDTO barangDto, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<BarangDTO> updateBarang(@PathVariable Long id, @RequestBody BarangDTO barangDto, @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         BarangModel barang = modelMapper.map(barangDto, BarangModel.class);
         if (barangDto.getVendor() != null) {
             VendorModel vendor = modelMapper.map(barangDto.getVendor(), VendorModel.class);
@@ -64,6 +67,7 @@ public class BarangController {
         BarangDTO updatedBarangDto = modelMapper.map(updatedBarang, BarangDTO.class);
         return new ResponseEntity<>(updatedBarangDto, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBarangById(@PathVariable Long id) {
