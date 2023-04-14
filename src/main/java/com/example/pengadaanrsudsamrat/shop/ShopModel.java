@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.vendor;
+package com.example.pengadaanrsudsamrat.shop;
 
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import jakarta.persistence.*;
@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "vendor")
+@Table(name = "shop")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VendorModel {
+public class ShopModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,13 +21,6 @@ public class VendorModel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone")
-    private String phone;
-    
-    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
-
 }
