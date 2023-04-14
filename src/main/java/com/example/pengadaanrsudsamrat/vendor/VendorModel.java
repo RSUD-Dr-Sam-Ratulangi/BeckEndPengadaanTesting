@@ -26,8 +26,18 @@ public class VendorModel {
 
     @Column(name = "phone")
     private String phone;
-    
+
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
+
+    public void addProduct(ProductModel product) {
+        products.add(product);
+        product.setVendor(this);
+    }
+
+    public void removeProduct(ProductModel product) {
+        products.remove(product);
+        product.setVendor(null);
+    }
 
 }

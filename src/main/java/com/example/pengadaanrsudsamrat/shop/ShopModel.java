@@ -23,4 +23,14 @@ public class ShopModel {
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
+
+    public void addProduct(ProductModel product) {
+        products.add(product);
+        product.setShop(this);
+    }
+
+    public void removeProduct(ProductModel product) {
+        products.remove(product);
+        product.setShop(null);
+    }
 }

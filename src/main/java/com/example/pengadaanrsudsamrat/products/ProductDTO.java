@@ -9,11 +9,11 @@ public class ProductDTO {
     private Long id;
     private String name;
     private String description;
-    private Double price;
-    private Integer quantity;
+    private double price;
+    private int quantity;
     private VendorDTO vendor;
     private ShopDTO shop;
-    private Long vendorId;
-    private Long shopId;
-}
+    private String imageUrl;
 
+
+}

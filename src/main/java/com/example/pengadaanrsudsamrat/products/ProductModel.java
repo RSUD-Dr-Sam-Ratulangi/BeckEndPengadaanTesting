@@ -42,4 +42,18 @@ public class ProductModel {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    public void setVendor(VendorModel vendor) {
+        this.vendor = vendor;
+        if (vendor != null) {
+            vendor.addProduct(this);
+        }
+    }
+
+    public void setShop(ShopModel shop) {
+        this.shop = shop;
+        if (shop != null) {
+            shop.addProduct(this);
+        }
+    }
 }

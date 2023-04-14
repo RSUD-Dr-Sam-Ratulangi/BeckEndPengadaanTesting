@@ -10,6 +10,6 @@ public class VendorDTO {
     private Long id;
     private String name;
     private String address;
-    private String phoneNumber;
+    private String phone;
     private List<ProductDTO> products;
 }

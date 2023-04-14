@@ -1,7 +1,6 @@
 package com.example.pengadaanrsudsamrat.shop;
 
 import com.example.pengadaanrsudsamrat.products.ProductDTO;
-import com.example.pengadaanrsudsamrat.vendor.VendorDTO;
 import lombok.Data;
 
 import java.util.List;
