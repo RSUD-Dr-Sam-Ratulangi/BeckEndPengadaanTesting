@@ -1,13 +1,10 @@
 package com.example.pengadaanrsudsamrat.products;
 
-import com.example.pengadaanrsudsamrat.shop.ShopModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "product")
@@ -32,28 +29,12 @@ public class ProductModel {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vendor_id")
     private VendorModel vendor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id")
-    private ShopModel shop;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    public void setVendor(VendorModel vendor) {
-        this.vendor = vendor;
-        if (vendor != null) {
-            vendor.addProduct(this);
-        }
-    }
 
-    public void setShop(ShopModel shop) {
-        this.shop = shop;
-        if (shop != null) {
-            shop.addProduct(this);
-        }
-    }
 }
