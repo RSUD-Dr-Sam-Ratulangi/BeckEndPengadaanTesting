@@ -6,6 +6,7 @@ import com.example.pengadaanrsudsamrat.products.ProductModel;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +30,10 @@ public class VendorServiceImpl implements VendorService {
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
+
     @Override
-    public List<VendorProduct> findAll() {
-        List<VendorModel> vendorModels = vendorRepository.findAll();
-        return vendorModels.stream()
-                .map(vendorModel -> modelMapper.map(vendorModel, VendorProduct.class))
-                .collect(Collectors.toList());
+    public List<VendorModel> findAll() {
+        return  vendorRepository.findAll();
     }
 
     @Override
@@ -55,7 +54,9 @@ public class VendorServiceImpl implements VendorService {
         vendorModel.getProducts().add(productModel);
         vendorRepository.save(vendorModel);
 
-        return modelMapper.map(productModel, VendorProduct.class);
+        VendorProduct vendorProduct = modelMapper.map(vendorModel, VendorProduct.class);
+        return vendorProduct;
     }
+
 
 }

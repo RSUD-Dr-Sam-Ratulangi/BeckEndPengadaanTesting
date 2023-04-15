@@ -19,10 +19,14 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
+
+    //butuh perbaikan
     @GetMapping
-    public List<VendorProduct> getAllVendors() {
+    public List<VendorModel> getAllVendors() {
         return vendorService.findAll();
     }
+
+
 
     @PostMapping
     public ResponseEntity<VendorProduct> createVendor(@RequestBody VendorProduct vendorProduct) {
@@ -33,6 +37,7 @@ public class VendorController {
     @PostMapping("/{vendorId}/products")
     public ResponseEntity<VendorProduct> addProductToVendor(@PathVariable Long vendorId, @RequestBody ProductModel productModel) {
         VendorProduct updatedVendorProduct = vendorService.addProductToVendor(vendorId, productModel);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedVendorProduct);
     }
 
