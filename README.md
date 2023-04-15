@@ -38,7 +38,7 @@ Setelah langkah-langkah pre tersebut dilakukan, program Spring Boot siap dijalan
 Beckend Aplikasi Pendaftaran RSUD dr Sam Ratulangi tondano
 API Endpoint untuk Product Mendapatkan semua produk
 
-GET /products
+#GET /products
 Endpoint ini akan mengembalikan daftar semua produk yang ada dalam database.
 
 
@@ -79,8 +79,8 @@ Content-Type: application/json
         "imageUrl": "http://example.com/product2.jpg"
     }
 ]
-API Endpoint untuk Vendor
-Mendapatkan semua vendor
+#API Endpoint untuk Vendor
+
 
 GET /vendors
 Endpoint ini akan mengembalikan daftar semua vendor yang ada dalam database.
@@ -137,7 +137,7 @@ Content-Type: application/json
         ]
     }
 ]
-Membuat vendor baru
+#Membuat vendor baru
 
 POST /vendors
 Endpoint ini akan membuat vendor baru dalam database.
@@ -167,7 +167,7 @@ Content-Type: application/json
     "products": []
 }
 
-json
+
 
 {
     "id": 1,
