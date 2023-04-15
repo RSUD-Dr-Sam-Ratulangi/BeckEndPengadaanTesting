@@ -1,6 +1,7 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
 import com.example.pengadaanrsudsamrat.products.ProductModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class VendorModel {
     @Column(name = "phone")
     private String phone;
 
-    // marks the owning side of the relationship
+    @JsonBackReference // marks the owning side of the relationship
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
 }
