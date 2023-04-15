@@ -1,15 +1,47 @@
+Clone repository dari GitHub ke dalam folder lokal Anda.
+Pastikan Anda sudah memiliki MySQL yang terpasang di komputer Anda.
+Buat database dengan nama "pengdaan_rsud_samrat" di MySQL.
+Buka file "application.properties" di folder "src/main/resources".
+Isi konfigurasi koneksi database MySQL pada file "application.properties" dengan konfigurasi berikut:
+
+
+spring.datasource.url=jdbc:mysql://localhost:3306/pengdaan_rsud_samrat
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+
+# Log SQL statements and parameters
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
+
+# Enable Hibernate statistics
+spring.jpa.properties.hibernate.generate_statistics=true
+logging.level.org.hibernate.stat=debug
+spring.jpa.properties.hibernate.show_sql=true
+spring.jpa.properties.hibernate.use_sql_comments=true
+spring.jpa.properties.hibernate.format_sql=true
+logging.level.org.hibernate.type.descriptor.sql=TRACE
+Buka file "pom.xml" di folder utama projek.
+
+
+Pastikan semua dependensi yang diperlukan sudah terdaftar dalam file "pom.xml".
+Jalankan program dengan menggunakan IDE atau dengan perintah mvn spring-boot:run pada terminal di folder utama projek.
+Setelah langkah-langkah pre tersebut dilakukan, program Spring Boot siap dijalankan dan dapat diakses melalui browser atau Postman pada alamat http://localhost:8080.
+
+
+
 # BeckEndPengadaanTesting
 Beckend Aplikasi Pendaftaran RSUD dr Sam Ratulangi tondano
-API Endpoint untuk Product
-Mendapatkan semua produk
-bash
-Copy code
+API Endpoint untuk Product Mendapatkan semua produk
+
 GET /products
 Endpoint ini akan mengembalikan daftar semua produk yang ada dalam database.
 
-Request
-bash
-Copy code
+
 GET /products
 Response
 makefile
@@ -49,8 +81,7 @@ Content-Type: application/json
 ]
 API Endpoint untuk Vendor
 Mendapatkan semua vendor
-bash
-Copy code
+
 GET /vendors
 Endpoint ini akan mengembalikan daftar semua vendor yang ada dalam database.
 
@@ -107,8 +138,7 @@ Content-Type: application/json
     }
 ]
 Membuat vendor baru
-bash
-Copy code
+
 POST /vendors
 Endpoint ini akan membuat vendor baru dalam database.
 
@@ -137,14 +167,8 @@ Content-Type: application/json
     "products": []
 }
 
-
-
-dark zill
-bagaimana dengan add producttovendor
-Untuk API endpoint add product to vendor, Anda dapat mengirimkan POST request ke /vendors/{vendorId}/products dengan mengirimkan body JSON berisi informasi produk yang ingin ditambahkan ke vendor. Berikut adalah contoh body JSON untuk menambahkan produk dengan id 1 ke vendor dengan id 2:
-
 json
-Copy code
+
 {
     "id": 1,
     "name": "Product A",
@@ -153,10 +177,8 @@ Copy code
     "quantity": 10,
     "imageUrl": "https://example.com/image.png"
 }
-Setelah berhasil ditambahkan, API akan mengembalikan response dengan status code 201 CREATED dan body JSON yang berisi informasi vendor yang telah ditambahkan produknya:
 
-json
-Copy code
+
 {
     "id": 2,
     "name": "Vendor A",
