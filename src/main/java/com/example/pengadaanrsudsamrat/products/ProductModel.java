@@ -1,6 +1,7 @@
 package com.example.pengadaanrsudsamrat.products;
 
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class ProductModel {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vendor_id")
     private VendorModel vendor;

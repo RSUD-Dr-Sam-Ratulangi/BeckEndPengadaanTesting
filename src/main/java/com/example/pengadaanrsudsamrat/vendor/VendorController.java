@@ -1,6 +1,5 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-
 import com.example.pengadaanrsudsamrat.DTO.VendorProduct;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import org.springframework.http.HttpStatus;
@@ -19,14 +18,10 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-
-    //butuh perbaikan
     @GetMapping
     public List<VendorModel> getAllVendors() {
         return vendorService.findAll();
     }
-
-
 
     @PostMapping
     public ResponseEntity<VendorProduct> createVendor(@RequestBody VendorProduct vendorProduct) {
@@ -37,9 +32,7 @@ public class VendorController {
     @PostMapping("/{vendorId}/products")
     public ResponseEntity<VendorProduct> addProductToVendor(@PathVariable Long vendorId, @RequestBody ProductModel productModel) {
         VendorProduct updatedVendorProduct = vendorService.addProductToVendor(vendorId, productModel);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedVendorProduct);
     }
 
 }
-
