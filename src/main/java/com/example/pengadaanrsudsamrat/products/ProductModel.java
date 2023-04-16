@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Entity
 @Table(name = "product")
 @Data
@@ -17,6 +20,10 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "uuid", nullable = false)
+    private String product_uuid;
+
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -37,6 +44,14 @@ public class ProductModel {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+
+    @PrePersist
+    private void generateCustomId() {
+        UUID uuid = UUID.randomUUID();
+        String uniqueId = "PRD" + Instant.now().toEpochMilli() + uuid.toString().substring(0, 4).toUpperCase();
+        setProduct_uuid(uniqueId);
+    }
 
 
 }

@@ -54,8 +54,7 @@ public class VendorServiceImpl implements VendorService {
         vendorModel.getProducts().add(productModel);
         vendorRepository.save(vendorModel);
 
-        VendorProduct vendorProduct = modelMapper.map(vendorModel, VendorProduct.class);
-        return vendorProduct;
+        return modelMapper.map(vendorModel, VendorProduct.class);
     }
 
 

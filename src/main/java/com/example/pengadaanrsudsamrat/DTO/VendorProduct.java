@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VendorProduct {
     private Long id;
+    private String vendoruuid;
     private String name;
     private String address;
     private String phone;
