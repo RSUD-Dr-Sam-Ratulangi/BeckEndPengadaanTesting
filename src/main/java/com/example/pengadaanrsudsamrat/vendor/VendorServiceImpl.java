@@ -21,13 +21,10 @@ public class VendorServiceImpl implements VendorService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
-
-
-
     public VendorServiceImpl(VendorRepository vendorRepository, ProductRepository productRepository, ModelMapper modelMapper) {
         this.vendorRepository = vendorRepository;
         this.productRepository = productRepository;
-        this.modelMapper = modelMapper;
+        this.modelMapper = new ModelMapper();
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
