@@ -18,6 +18,6 @@ public class OrderDTO {
     private List<OrderItemDTO> orderItems;
     private PaymentDTO payment;
 
-    // constructors, getters, and setters
+
 
 }

@@ -22,7 +22,7 @@ public class VendorModel {
     private Long id;
 
     @Column(name = "uuid", nullable = false)
-    private String vendor_uuid;
+    private String vendoruuid;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -41,6 +41,6 @@ public class VendorModel {
     private void generateCustomId() {
         UUID uuid = UUID.randomUUID();
         String uniqueId = "VEN" + Instant.now().toEpochMilli() + uuid.toString().substring(0, 4).toUpperCase();
-        setVendor_uuid(uniqueId);
+        setVendoruuid(uniqueId);
     }
 }

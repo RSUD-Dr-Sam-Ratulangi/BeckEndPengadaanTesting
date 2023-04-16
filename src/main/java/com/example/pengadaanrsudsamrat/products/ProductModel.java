@@ -22,7 +22,7 @@ public class ProductModel {
     private Long id;
 
     @Column(name = "uuid", nullable = false)
-    private String product_uuid;
+    private String productuuid;
 
 
     @Column(name = "name", nullable = false)
@@ -50,7 +50,7 @@ public class ProductModel {
     private void generateCustomId() {
         UUID uuid = UUID.randomUUID();
         String uniqueId = "PRD" + Instant.now().toEpochMilli() + uuid.toString().substring(0, 4).toUpperCase();
-        setProduct_uuid(uniqueId);
+        setProductuuid(uniqueId);
     }
 
 

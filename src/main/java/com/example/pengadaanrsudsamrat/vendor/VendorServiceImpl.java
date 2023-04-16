@@ -23,6 +23,7 @@ public class VendorServiceImpl implements VendorService {
 
 
 
+
     public VendorServiceImpl(VendorRepository vendorRepository, ProductRepository productRepository, ModelMapper modelMapper) {
         this.vendorRepository = vendorRepository;
         this.productRepository = productRepository;
@@ -43,6 +44,7 @@ public class VendorServiceImpl implements VendorService {
         return modelMapper.map(savedVendor, VendorProduct.class);
     }
 
+
     @Override
     public VendorProduct addProductToVendor(Long vendorId, ProductModel productModel) {
         VendorModel vendorModel = vendorRepository.findById(vendorId)
@@ -56,6 +58,7 @@ public class VendorServiceImpl implements VendorService {
 
         return modelMapper.map(vendorModel, VendorProduct.class);
     }
+
 
 
 }
