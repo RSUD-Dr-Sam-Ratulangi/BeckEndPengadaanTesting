@@ -14,6 +14,7 @@ public class OrderItemDTO {
     private int quantity;
     private ProductDTO product;
 
+
 // constructors, getters, and setters
 
 }

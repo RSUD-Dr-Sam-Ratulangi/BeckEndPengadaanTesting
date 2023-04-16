@@ -3,12 +3,10 @@ package com.example.pengadaanrsudsamrat.order;
 import com.example.pengadaanrsudsamrat.DTO.OrderDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -28,5 +26,12 @@ public class OrderController {
         return ResponseEntity.created(URI.create("/orders/" + createdOrderDTO.getId()))
                 .body(createdOrderDTO);
     }
+
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        List<OrderDTO> orders = orderService.findAll();
+        return ResponseEntity.ok(orders);
+    }
+
 }
 
