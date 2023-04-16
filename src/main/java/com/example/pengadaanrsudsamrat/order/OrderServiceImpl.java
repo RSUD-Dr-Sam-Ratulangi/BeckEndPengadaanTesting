@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,28 +38,41 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
         OrderModel orderModel = modelMapper.map(orderDTO, OrderModel.class);
-        VendorModel vendorModel = vendorRepository.findById(orderDTO.getVendor().getId()).orElseThrow(EntityNotFoundException::new);
+        double totalAmount = 0.0;
 
-        orderModel.setVendor(vendorModel);
+        if (orderDTO.getOrderItems() != null) {
+            List<OrderItemModel> orderItemModels = new ArrayList<>();
+            for (OrderItemDTO orderItemDTO : orderDTO.getOrderItems()) {
+                OrderItemModel orderItemModel = modelMapper.map(orderItemDTO, OrderItemModel.class);
+                ProductModel productModel = productRepository.findById(orderItemDTO.getProduct().getId()).orElseThrow(EntityNotFoundException::new);
 
-        List<OrderItemModel> orderItemModels = new ArrayList<>();
-        for (OrderItemDTO orderItemDTO : orderDTO.getOrderItems()) {
-            OrderItemModel orderItemModel = modelMapper.map(orderItemDTO, OrderItemModel.class);
-            ProductModel productModel = productRepository.findById(orderItemDTO.getProduct().getId()).orElseThrow(EntityNotFoundException::new);
-            orderItemModel.setProduct(productModel);
-            orderItemModel.setOrder(orderModel);
-            orderItemModels.add(orderItemModel);
+                // Subtract the quantity of the ordered product from the available quantity
+                int newQuantity = productModel.getQuantity() - orderItemDTO.getQuantity();
+                productModel.setQuantity(newQuantity);
+
+                orderItemModel.setProduct(productModel);
+                orderItemModel.setOrder(orderModel);
+                orderItemModels.add(orderItemModel);
+
+                // Add the price of the ordered product to the total amount
+                totalAmount += orderItemDTO.getQuantity() * productModel.getPrice();
+            }
+            orderModel.setOrderItems(orderItemModels);
         }
 
-        PaymentModel paymentModel = modelMapper.map(orderDTO.getPayment(), PaymentModel.class);
-        paymentModel.setOrder(orderModel);
-
-        orderModel.setOrderItems(orderItemModels);
-        orderModel.setPayment(paymentModel);
+        if (orderDTO.getPayment() != null) {
+            PaymentModel paymentModel = modelMapper.map(orderDTO.getPayment(), PaymentModel.class);
+            paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
+            paymentModel.setOrder(orderModel);
+            orderModel.setPayment(paymentModel);
+        }
 
         OrderModel savedOrder = orderRepository.save(orderModel);
 
         return modelMapper.map(savedOrder, OrderDTO.class);
     }
+
+
+
 }
 

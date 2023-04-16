@@ -15,7 +15,6 @@ public class OrderDTO {
 
     private Long id;
     private Date orderDate;
-    private VendorDTO vendor;
     private List<OrderItemDTO> orderItems;
     private PaymentDTO payment;
 
