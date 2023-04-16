@@ -1,19 +1,20 @@
 package com.example.pengadaanrsudsamrat.DTO;
 
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VendorDTO {
+public class PaymentDTO {
+
     private Long id;
-    private String vendoruuid;
-    private String name;
-    private String address;
-    private String phoneNumber;
+    private BigDecimal amount;
+
+    // constructors, getters, and setters
 
 }
