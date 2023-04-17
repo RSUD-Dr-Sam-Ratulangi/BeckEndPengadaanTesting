@@ -1,6 +1,6 @@
 package com.example.pengadaanrsudsamrat.DTO;
 
-
+import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemDTO {
-
+public class BidDTO {
     private Long id;
-    private int quantity;
-    private ProductDTO product;
-    
-
-// constructors, getters, and setters
-
+    private double price;
+    private Long vendorId;
+    private Long productRequestId;
+    private boolean selected;
 }
+
