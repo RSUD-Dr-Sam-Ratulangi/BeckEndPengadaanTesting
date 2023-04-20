@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Vendor Endpoint Example</title>
-	<style>
-		table, th, td {
-			border: 1px solid black;
-			border-collapse: collapse;
-		}
-		th, td {
-			padding: 10px;
-			text-align: left;
-		}
-	</style>
+	<title>Contoh Vendor Endpoint </title>
+
 </head>
 <body>
 	<h1>Vendor Endpoint Example</h1>
