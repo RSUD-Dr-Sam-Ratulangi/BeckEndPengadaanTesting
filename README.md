@@ -14,21 +14,7 @@
 8. [x] 8 mvn deploy
 
 ## langkah untuk testing endpoint gunakan postman
-1. [x] install postman / buka postman di web
-2. [x] fork `[https://www.postman.com/altimetry-explorer-5015872/workspace/darkzill/collection/24300822-226eea7f-5a14-42f1-bd03-e9474133f8cd?action=share&creator=24300822]
 
-langkah-langkah start aplikasi :
-
-1 Intall maven terbaru
-2 install jdk 17++
-3 vscode > install mvn & springboot plugin
-4 clone project  https://github.com/RSUD-Dr-Sam-Ratulangi/BeckEndPengadaanTesting.git
-5 install mysql 8.0 ++
-6 buat database pengdaan_rsud_samrat dimysql
-7 mvn clean install
-8 mvn deploy
-
-langkah untuk testing endpoint gunakan postman
 1. install postman / buka postman di web
 2. fork https://www.postman.com/altimetry-explorer-5015872/workspace/darkzill/collection/24300822-226eea7f-5a14-42f1-bd03-e9474133f8cd?action=share&creator=24300822)`
 
