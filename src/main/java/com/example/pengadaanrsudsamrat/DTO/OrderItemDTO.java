@@ -12,7 +12,7 @@ public class OrderItemDTO {
 
     private Long id;
     private int quantity;
-    private ProductDTO product;
+    private ProductResponseDTO product;
     
 
 // constructors, getters, and setters

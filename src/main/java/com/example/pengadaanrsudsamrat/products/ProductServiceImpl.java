@@ -1,6 +1,10 @@
 package com.example.pengadaanrsudsamrat.products;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO;
+import com.example.pengadaanrsudsamrat.vendor.VendorModel;
+import com.example.pengadaanrsudsamrat.vendor.VendorRepository;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,29 +21,99 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final VendorRepository vendorRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, VendorRepository vendorRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.vendorRepository = vendorRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public Page<ProductDTO> findAllProducts(Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<ProductResponseDTO> findAllProducts(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProductModel> products = productRepository.findAll(pageable);
-        List<ProductDTO> productDTOs = products.getContent().stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
+        List<ProductResponseDTO> productResponseDTOS = products.getContent().stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
                 .collect(Collectors.toList());
-        return new PageImpl<>(productDTOs, pageable, products.getTotalElements());
+        return new PageImpl<>(productResponseDTOS, pageable, products.getTotalElements());
     }
 
     @Override
-    public Optional<ProductDTO> findProductByUuid(String uuid) {
+    public Optional<ProductResponseDTO> findProductByUuid(String uuid) {
         Optional<ProductModel> product = productRepository.findByProductuuid(uuid);
-        return Optional.ofNullable(product.map(p -> modelMapper.map(p, ProductDTO.class))
+        return Optional.ofNullable(product.map(p -> modelMapper.map(p, ProductResponseDTO.class))
                 .orElseThrow(() -> new RuntimeException("Product not found")));
+    }
+
+    @Override
+    public ProductResponseDTO addProductToVendor(String vendorUuid, ProductRequestDTO productRequestDTO) {
+        VendorModel vendor = vendorRepository.findByVendoruuid(vendorUuid)
+                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+
+        ProductModel product = modelMapper.map(productRequestDTO, ProductModel.class);
+        product.setVendor(vendor);
+
+        ProductModel savedProduct = productRepository.save(product);
+        return modelMapper.map(savedProduct, ProductResponseDTO.class);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findAllProductsByVendorUuid(String vendorUuid) {
+        List<ProductModel> products = productRepository.findByVendorVendoruuid(vendorUuid);
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductResponseDTO updateProductByProductUUid(String uuid, ProductRequestDTO productRequestDTO) {
+        Optional<ProductModel> productOptional = productRepository.findByProductuuid(uuid);
+
+        if (productOptional.isPresent()) {
+            ProductModel product = productOptional.get();
+
+            if (productRequestDTO.getName() != null) {
+                product.setName(productRequestDTO.getName());
+            }
+
+            if (productRequestDTO.getDescription() != null) {
+                product.setDescription(productRequestDTO.getDescription());
+            }
+
+            if (productRequestDTO.getPrice() != 0) {
+                product.setPrice(productRequestDTO.getPrice());
+            }
+
+            if (productRequestDTO.getQuantity() != 0) {
+                product.setQuantity(productRequestDTO.getQuantity());
+            }
+
+            if (productRequestDTO.getImageUrl() != null) {
+                product.setImageUrl(productRequestDTO.getImageUrl());
+            }
+
+            return modelMapper.map(productRepository.save(product), ProductResponseDTO.class);
+        } else {
+            throw new RuntimeException("Product not found");
+        }
+    }
+    @Override
+    public void deleteProductByUuid(String uuid) {
+        ProductModel product = productRepository.findByProductuuid(uuid)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productRepository.delete(product);
+    }
+
+
+    @Override
+    public Page<ProductResponseDTO> searchProducts(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductModel> products = productRepository.search(keyword, pageable);
+        return products.map(product -> modelMapper.map(product, ProductResponseDTO.class));
     }
 
 

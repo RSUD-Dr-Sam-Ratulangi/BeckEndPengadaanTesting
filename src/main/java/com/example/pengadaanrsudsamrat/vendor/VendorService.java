@@ -1,12 +1,15 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-import com.example.pengadaanrsudsamrat.DTO.VendorProduct;
-import com.example.pengadaanrsudsamrat.products.ProductModel;
+import com.example.pengadaanrsudsamrat.DTO.*;
 
 import java.util.List;
 
 public interface VendorService {
-    List<VendorModel> findAll();
-    VendorProduct createVendorProduct(VendorProduct vendorProduct);
-    VendorProduct addProductToVendor(Long vendorId, ProductModel productModel);
+    List<VendorResponseDTO> findAllVendors();
+    VendorResponseDTO findVendorByUuid(String vendorUuid);
+    VendorResponseDTO createVendor(VendorRequestDTO vendorRequestDTO);
+    VendorResponseDTO updateVendorByUuid(String vendorUuid, VendorRequestDTO vendorRequestDTO);
+
+    void deleteVendorByUuid(String vendorUuid);
+
 }

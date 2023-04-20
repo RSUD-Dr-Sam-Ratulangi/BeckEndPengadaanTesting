@@ -1,15 +1,15 @@
 package com.example.pengadaanrsudsamrat.ProductRequest;
 
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
 
 import java.util.List;
 
 public interface ProductRequestService {
-    List<ProductRequestDTO> getAllProductRequests();
-    ProductRequestDTO getProductRequestById(Long id);
-    ProductRequestDTO createProductRequest(ProductRequestDTO productRequestDTO);
-    ProductRequestDTO updateProductRequest(Long id, ProductRequestDTO productRequestDTO);
+    List<ProductRequestRequestDTO> getAllProductRequests();
+    ProductRequestRequestDTO getProductRequestById(Long id);
+    ProductRequestRequestDTO createProductRequest(ProductRequestRequestDTO productRequestRequestDTO);
+    ProductRequestRequestDTO updateProductRequest(Long id, ProductRequestRequestDTO productRequestRequestDTO);
     void deleteProductRequest(Long id);
 }
 

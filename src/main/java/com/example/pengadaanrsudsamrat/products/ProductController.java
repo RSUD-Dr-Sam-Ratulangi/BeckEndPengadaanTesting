@@ -1,9 +1,11 @@
 package com.example.pengadaanrsudsamrat.products;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductDTO;
-import org.modelmapper.ModelMapper;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,45 +14,60 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProductController {
 
     private final ProductService productService;
 
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public ProductController(ProductService productService, ModelMapper modelMapper) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = {"/{page}/{size}","/"})
-
-    public ResponseEntity<Page<ProductDTO>> getAllProducts(
-            @PathVariable(required = false) Integer page,
-            @PathVariable(required = false) Integer size) {
-        if (page == null) {
-            page = 0;
-        }
-        if (size == null) {
-            size = 10;
-        }
-        Page<ProductDTO> products = productService.findAllProducts(page, size);
+    @GetMapping
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam(defaultValue = "0") Integer page,
+                                                                   @RequestParam(defaultValue = "10") Integer size) {
+        Page<ProductResponseDTO> products = productService.findAllProducts(page, size);
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ProductResponseDTO> getProductByUuid(@PathVariable String uuid) {
+        Optional<ProductResponseDTO> product = productService.findProductByUuid(uuid);
+        return ResponseEntity.of(product);
+    }
 
+    @PostMapping("/{vendorUuid}")
+    public ResponseEntity<ProductResponseDTO> addProductToVendor(@PathVariable String vendorUuid,
+                                                                 @RequestBody ProductRequestDTO productRequestDTO) {
+        ProductResponseDTO savedProduct = productService.addProductToVendor(vendorUuid, productRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
+    }
 
-    @GetMapping("/products/{productuuid}")
+    @GetMapping("/vendor/{vendorUuid}")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProductsByVendorUuid(@PathVariable String vendorUuid) {
+        List<ProductResponseDTO> products = productService.findAllProductsByVendorUuid(vendorUuid);
+        return ResponseEntity.ok(products);
+    }
 
-    public ResponseEntity<ProductDTO> getProductByUuid(@PathVariable String productuuid) {
-        Optional<ProductDTO> product = productService.findProductByUuid(productuuid);
-        if (product.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        ProductDTO productDTO = product.get();
-        return ResponseEntity.ok(productDTO);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable String uuid,
+                                                            @RequestBody ProductRequestDTO productRequestDTO) {
+        ProductResponseDTO updatedProduct = productService.updateProductByProductUUid(uuid, productRequestDTO);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteProductByUuid(@PathVariable String uuid) {
+        productService.deleteProductByUuid(uuid);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductResponseDTO>> searchProducts(@RequestParam String keyword,
+                                                                   @RequestParam(defaultValue = "0") Integer page,
+                                                                   @RequestParam(defaultValue = "10") Integer size) {
+        Page<ProductResponseDTO> products = productService.searchProducts(keyword, page, size);
+        return ResponseEntity.ok(products);
     }
 
 

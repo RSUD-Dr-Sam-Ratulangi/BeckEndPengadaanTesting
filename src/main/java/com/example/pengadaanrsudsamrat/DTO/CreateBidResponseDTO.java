@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateBidResponseDTO {
     private Long id;
-    private VendorDTO vendor;
-    private ProductRequestDTO productRequest;
+    private VendorResponseDTO vendor;
+    private ProductRequestRequestDTO productRequest;
     private double price;
     private boolean selected;
     private String errorMessage;

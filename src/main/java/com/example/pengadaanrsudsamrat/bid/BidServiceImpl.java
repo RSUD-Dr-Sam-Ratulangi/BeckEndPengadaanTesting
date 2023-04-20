@@ -2,15 +2,14 @@ package com.example.pengadaanrsudsamrat.bid;
 
 import com.example.pengadaanrsudsamrat.DTO.BidDTO;
 import com.example.pengadaanrsudsamrat.DTO.CreateBidResponseDTO;
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.VendorDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.VendorResponseDTO;
 import com.example.pengadaanrsudsamrat.ProductRequest.ProductRequestModel;
 import com.example.pengadaanrsudsamrat.ProductRequest.ProductRequestRepository;
 import com.example.pengadaanrsudsamrat.exception.ResourceNotFoundException;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +56,8 @@ public class BidServiceImpl implements BidService {
         bidModel.setProductRequest(productRequest);
         BidModel savedBidModel = bidRepository.save(bidModel);
         CreateBidResponseDTO createBidResponseDTO = modelMapper.map(savedBidModel, CreateBidResponseDTO.class);
-        createBidResponseDTO.setVendor(modelMapper.map(savedBidModel.getVendor(), VendorDTO.class));
-        createBidResponseDTO.setProductRequest(modelMapper.map(savedBidModel.getProductRequest(), ProductRequestDTO.class));
+        createBidResponseDTO.setVendor(modelMapper.map(savedBidModel.getVendor(), VendorResponseDTO.class));
+        createBidResponseDTO.setProductRequest(modelMapper.map(savedBidModel.getProductRequest(), ProductRequestRequestDTO.class));
         return createBidResponseDTO;
     }
 

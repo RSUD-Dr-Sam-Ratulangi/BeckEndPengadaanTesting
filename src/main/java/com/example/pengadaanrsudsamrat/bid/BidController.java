@@ -71,8 +71,8 @@ public class BidController {
         ProductRequestModel productRequest = productRequestRepository.findById(bidDTO.getProductRequestId())
                 .orElseThrow(() -> new EntityNotFoundException("Product Request not found with id " + bidDTO.getProductRequestId()));
         CreateBidResponseDTO createBidResponseDTO = bidService.createBid(bidDTO);
-        createBidResponseDTO.setVendor(modelMapper.map(vendor, VendorDTO.class));
-        createBidResponseDTO.setProductRequest(modelMapper.map(productRequest, ProductRequestDTO.class));
+        createBidResponseDTO.setVendor(modelMapper.map(vendor, VendorResponseDTO.class));
+        createBidResponseDTO.setProductRequest(modelMapper.map(productRequest, ProductRequestRequestDTO.class));
         return ResponseEntity.ok(createBidResponseDTO);
     }
 

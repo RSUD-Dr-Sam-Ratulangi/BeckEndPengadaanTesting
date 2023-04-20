@@ -1,6 +1,6 @@
 package com.example.pengadaanrsudsamrat.ProductRequest;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,26 +23,26 @@ public class ProductRequestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductRequestDTO>> getAllProductRequests() {
-        List<ProductRequestDTO> productRequests = productRequestService.getAllProductRequests();
+    public ResponseEntity<List<ProductRequestRequestDTO>> getAllProductRequests() {
+        List<ProductRequestRequestDTO> productRequests = productRequestService.getAllProductRequests();
         return ResponseEntity.ok(productRequests);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductRequestDTO> getProductRequestById(@PathVariable Long id) {
-        ProductRequestDTO productRequest = productRequestService.getProductRequestById(id);
+    public ResponseEntity<ProductRequestRequestDTO> getProductRequestById(@PathVariable Long id) {
+        ProductRequestRequestDTO productRequest = productRequestService.getProductRequestById(id);
         return ResponseEntity.ok(productRequest);
     }
 
     @PostMapping
-    public ResponseEntity<ProductRequestDTO> createProductRequest(@RequestBody ProductRequestDTO productRequestDTO) {
-        ProductRequestDTO createdProductRequest = productRequestService.createProductRequest(productRequestDTO);
+    public ResponseEntity<ProductRequestRequestDTO> createProductRequest(@RequestBody ProductRequestRequestDTO productRequestRequestDTO) {
+        ProductRequestRequestDTO createdProductRequest = productRequestService.createProductRequest(productRequestRequestDTO);
         return new ResponseEntity<>(createdProductRequest, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductRequestDTO> updateProductRequest(@PathVariable Long id, @RequestBody ProductRequestDTO productRequestDTO) {
-        ProductRequestDTO updatedProductRequest = productRequestService.updateProductRequest(id, productRequestDTO);
+    public ResponseEntity<ProductRequestRequestDTO> updateProductRequest(@PathVariable Long id, @RequestBody ProductRequestRequestDTO productRequestRequestDTO) {
+        ProductRequestRequestDTO updatedProductRequest = productRequestService.updateProductRequest(id, productRequestRequestDTO);
         return ResponseEntity.ok(updatedProductRequest);
     }
 

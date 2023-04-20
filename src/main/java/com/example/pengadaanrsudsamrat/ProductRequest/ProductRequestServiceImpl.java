@@ -1,6 +1,6 @@
 package com.example.pengadaanrsudsamrat.ProductRequest;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,38 +22,38 @@ public class ProductRequestServiceImpl implements ProductRequestService {
     }
 
     @Override
-    public List<ProductRequestDTO> getAllProductRequests() {
+    public List<ProductRequestRequestDTO> getAllProductRequests() {
         List<ProductRequestModel> productRequests = productRequestRepository.findAll();
-        return productRequests.stream().map(pr -> modelMapper.map(pr, ProductRequestDTO.class)).collect(Collectors.toList());
+        return productRequests.stream().map(pr -> modelMapper.map(pr, ProductRequestRequestDTO.class)).collect(Collectors.toList());
     }
 
     @Override
-    public ProductRequestDTO getProductRequestById(Long id) {
+    public ProductRequestRequestDTO getProductRequestById(Long id) {
         ProductRequestModel productRequest = productRequestRepository.findById(id).orElseThrow(() -> new RuntimeException("Product request not found with id: " + id));
-        return modelMapper.map(productRequest, ProductRequestDTO.class);
+        return modelMapper.map(productRequest, ProductRequestRequestDTO.class);
     }
 
     @Override
-    public ProductRequestDTO createProductRequest(ProductRequestDTO productRequestDTO) {
-        ProductRequestModel productRequest = modelMapper.map(productRequestDTO, ProductRequestModel.class);
+    public ProductRequestRequestDTO createProductRequest(ProductRequestRequestDTO productRequestRequestDTO) {
+        ProductRequestModel productRequest = modelMapper.map(productRequestRequestDTO, ProductRequestModel.class);
         productRequest.setCreatedAt(new Date());
         ProductRequestModel savedProductRequest = productRequestRepository.save(productRequest);
-        return modelMapper.map(savedProductRequest, ProductRequestDTO.class);
+        return modelMapper.map(savedProductRequest, ProductRequestRequestDTO.class);
     }
 
     @Override
-    public ProductRequestDTO updateProductRequest(Long id, ProductRequestDTO productRequestDTO) {
+    public ProductRequestRequestDTO updateProductRequest(Long id, ProductRequestRequestDTO productRequestRequestDTO) {
         ProductRequestModel productRequestToUpdate = productRequestRepository.findById(id).orElseThrow(() -> new RuntimeException("Product request not found with id: " + id));
 
-        productRequestToUpdate.setName(productRequestDTO.getName());
-        productRequestToUpdate.setDescription(productRequestDTO.getDescription());
-        productRequestToUpdate.setPrice(productRequestDTO.getPrice());
-        productRequestToUpdate.setQuantity(productRequestDTO.getQuantity());
-        productRequestToUpdate.setImageUrl(productRequestDTO.getImageUrl());
-        productRequestToUpdate.setStatus(productRequestDTO.getStatus());
+        productRequestToUpdate.setName(productRequestRequestDTO.getName());
+        productRequestToUpdate.setDescription(productRequestRequestDTO.getDescription());
+        productRequestToUpdate.setPrice(productRequestRequestDTO.getPrice());
+        productRequestToUpdate.setQuantity(productRequestRequestDTO.getQuantity());
+        productRequestToUpdate.setImageUrl(productRequestRequestDTO.getImageUrl());
+        productRequestToUpdate.setStatus(productRequestRequestDTO.getStatus());
 
         ProductRequestModel updatedProductRequest = productRequestRepository.save(productRequestToUpdate);
-        return modelMapper.map(updatedProductRequest, ProductRequestDTO.class);
+        return modelMapper.map(updatedProductRequest, ProductRequestRequestDTO.class);
     }
 
     @Override
