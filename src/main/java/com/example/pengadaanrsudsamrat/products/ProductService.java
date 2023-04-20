@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    Page<ProductDTO> findAllProducts(int page, int size);
+    Page<ProductDTO> findAllProducts(Integer page, Integer size);
     Optional<ProductDTO> findProductByUuid(String uuid);
 }

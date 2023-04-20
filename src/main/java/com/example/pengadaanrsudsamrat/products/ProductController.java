@@ -25,12 +25,23 @@ public class ProductController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getAllProducts(@RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size) {
+    @GetMapping(value = {"/{page}/{size}","/"})
+
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(
+            @PathVariable(required = false) Integer page,
+            @PathVariable(required = false) Integer size) {
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
         Page<ProductDTO> products = productService.findAllProducts(page, size);
         return ResponseEntity.ok(products);
     }
+
+
+
     @GetMapping("/products/{productuuid}")
 
     public ResponseEntity<ProductDTO> getProductByUuid(@PathVariable String productuuid) {

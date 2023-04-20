@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDTO> findAllProducts(int pageNumber, int pageSize) {
+    public Page<ProductDTO> findAllProducts(Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<ProductModel> products = productRepository.findAll(pageable);
         List<ProductDTO> productDTOs = products.getContent().stream()
