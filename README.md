@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Contoh Vendor Endpoint </title>
 
-</head>
 <body>
-	<h1>Vendor Endpoint Example</h1>
+	<h1>Contoh Vendor Endpoint </h1>
 	<table>
 		<thead>
 			<tr>
