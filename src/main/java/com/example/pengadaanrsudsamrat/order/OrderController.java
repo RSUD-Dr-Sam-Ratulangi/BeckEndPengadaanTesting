@@ -1,11 +1,14 @@
 package com.example.pengadaanrsudsamrat.order;
 
-import com.example.pengadaanrsudsamrat.DTO.OrderDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderAddItemRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderItemRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,17 +24,28 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-        OrderDTO createdOrderDTO = orderService.createOrder(orderDTO);
-        return ResponseEntity.created(URI.create("/orders/" + createdOrderDTO.getId()))
-                .body(createdOrderDTO);
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        OrderResponseDTO orderResponseDTO = orderService.createOrder(orderRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
     }
 
-    @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        List<OrderDTO> orders = orderService.findAll();
-        return ResponseEntity.ok(orders);
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long orderId,
+                                                        @RequestBody List<OrderItemRequestDTO> orderItemRequestDTOList) {
+        OrderResponseDTO updatedOrder = orderService.updateOrderItemList(orderId, orderItemRequestDTOList);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    @PostMapping("/{orderId}/items")
+    public ResponseEntity<OrderResponseDTO> addOrderItemToOrder(@PathVariable Long orderId, @RequestBody List<OrderItemRequestDTO> orderItems) {
+        OrderResponseDTO orderResponseDTO = orderService.addOrderItemsToOrder(orderId, orderItems);
+        return ResponseEntity.ok(orderResponseDTO);
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
+        OrderResponseDTO orderResponseDTO = orderService.getOrderById(orderId);
+        return ResponseEntity.ok(orderResponseDTO);
     }
 
 }
-

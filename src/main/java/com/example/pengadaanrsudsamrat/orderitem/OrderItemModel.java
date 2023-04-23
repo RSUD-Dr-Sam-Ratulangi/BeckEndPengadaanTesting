@@ -1,5 +1,6 @@
-package com.example.pengadaanrsudsamrat.order;
+package com.example.pengadaanrsudsamrat.orderitem;
 
+import com.example.pengadaanrsudsamrat.order.OrderModel;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
