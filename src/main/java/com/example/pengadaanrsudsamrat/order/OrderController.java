@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,10 +24,11 @@ public class OrderController {
         this.modelMapper = modelMapper;
     }
 
+
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO) {
         OrderResponseDTO orderResponseDTO = orderService.createOrder(orderRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
+        return orderResponseDTO;
     }
 
     @PutMapping("/{orderId}")
@@ -42,10 +44,15 @@ public class OrderController {
         return ResponseEntity.ok(orderResponseDTO);
     }
 
+
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long orderId) {
         OrderResponseDTO orderResponseDTO = orderService.getOrderById(orderId);
         return ResponseEntity.ok(orderResponseDTO);
     }
+
+
+
+
 
 }

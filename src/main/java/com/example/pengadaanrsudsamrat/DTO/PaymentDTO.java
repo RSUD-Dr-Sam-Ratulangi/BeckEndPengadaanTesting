@@ -1,6 +1,7 @@
 package com.example.pengadaanrsudsamrat.DTO;
 
 
+import com.example.pengadaanrsudsamrat.order.OrderModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PaymentDTO {
 
-    private Long id;
+    private Long id = 0L;
     private BigDecimal amount;
+    private Long orderid;
 
     // constructors, getters, and setters
 

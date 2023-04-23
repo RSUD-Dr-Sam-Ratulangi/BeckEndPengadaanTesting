@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +26,9 @@ public class OrderModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(name = "order_date", nullable = false)
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,4 +40,6 @@ public class OrderModel {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private PaymentModel payment;
+
+
 }

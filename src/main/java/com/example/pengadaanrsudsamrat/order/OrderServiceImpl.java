@@ -1,9 +1,5 @@
 package com.example.pengadaanrsudsamrat.order;
-
-
-
 import com.example.pengadaanrsudsamrat.DTO.*;
-
 import com.example.pengadaanrsudsamrat.exception.NotEnoughStockException;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemRepository;
@@ -16,9 +12,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,29 +39,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDTO createOrder(@Valid OrderRequestDTO orderRequestDTO) {
         OrderModel orderModel = new OrderModel();
-        orderModel.setOrderDate(new Date());
-        List<OrderItemModel> orderItemModels = new ArrayList<>();
-
-        for (Long orderItemId : orderRequestDTO.getOrderItemIds()) {
-            OrderItemModel orderItemModel = orderItemRepository.findById(orderItemId)
-                    .orElseThrow(EntityNotFoundException::new);
-            orderItemModels.add(orderItemModel);
-        }
-
-        orderModel.setOrderItems(orderItemModels);
+        orderModel.setOrderDate(LocalDateTime.now());
 
         OrderModel savedOrderModel = orderRepository.save(orderModel);
 
-        double totalAmount = 0.0;
-        for (OrderItemModel orderItemModel : orderItemModels) {
-            totalAmount += orderItemModel.getProduct().getPrice() * orderItemModel.getQuantity();
-        }
-
         PaymentModel paymentModel = new PaymentModel();
-        paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
-
+        paymentModel.setOrder(savedOrderModel);
         PaymentModel savedPaymentModel = paymentRepository.save(paymentModel);
 
         savedOrderModel.setPayment(savedPaymentModel);
@@ -72,6 +54,10 @@ public class OrderServiceImpl implements OrderService {
 
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
+
+
+
+
 
     /*
     @Override
@@ -174,6 +160,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(EntityNotFoundException::new);
 
         List<OrderItemModel> existingOrderItems = orderModel.getOrderItems();
+        if (existingOrderItems == null) {
+            existingOrderItems = new ArrayList<>();
+        }
 
         for (OrderItemRequestDTO orderItemDTO : orderItems) {
             ProductModel productModel = productRepository.findById(orderItemDTO.getProductId())
@@ -221,6 +210,7 @@ public class OrderServiceImpl implements OrderService {
         PaymentModel paymentModel = savedOrderModel.getPayment();
         if (paymentModel == null) {
             paymentModel = new PaymentModel();
+            paymentModel.setOrder(savedOrderModel); // set the payment's order to the saved order
         }
         paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
         PaymentModel savedPaymentModel = paymentRepository.save(paymentModel);
@@ -235,12 +225,33 @@ public class OrderServiceImpl implements OrderService {
 
 
 
+
+
     @Override
     public OrderResponseDTO getOrderById(Long orderId) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
-        return modelMapper.map(orderModel, OrderResponseDTO.class);
+
+        double totalAmount = 0.0;
+        for (OrderItemModel orderItemModel : orderModel.getOrderItems()) {
+            totalAmount += orderItemModel.getProduct().getPrice() * orderItemModel.getQuantity();
+        }
+
+        PaymentModel paymentModel = orderModel.getPayment();
+        if (paymentModel == null) {
+            throw new EntityNotFoundException("Payment not found for this order.");
+        }
+
+        PaymentDTO paymentDTO = modelMapper.map(paymentModel, PaymentDTO.class);
+        paymentDTO.setAmount(BigDecimal.valueOf(totalAmount));
+
+        OrderResponseDTO orderResponseDTO = modelMapper.map(orderModel, OrderResponseDTO.class);
+        orderResponseDTO.setPayment(paymentDTO);
+
+        return orderResponseDTO;
     }
+
+
 
 
 
