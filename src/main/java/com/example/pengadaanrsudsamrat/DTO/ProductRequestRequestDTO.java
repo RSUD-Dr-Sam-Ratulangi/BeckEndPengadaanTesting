@@ -19,7 +19,6 @@ public class ProductRequestRequestDTO {
     private int quantity;
     private String imageUrl;
     private ProductRequestModel.ProductRequestStatus status;
-
     private Date createdAt;
 }
 
