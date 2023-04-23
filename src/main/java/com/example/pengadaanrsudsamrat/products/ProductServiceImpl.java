@@ -31,6 +31,8 @@ public class ProductServiceImpl implements ProductService {
         this.modelMapper = modelMapper;
     }
 
+
+
     @Override
     public Page<ProductResponseDTO> findAllProducts(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -48,17 +50,17 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found")));
     }
 
-    @Override
-    public ProductResponseDTO addProductToVendor(String vendorUuid, ProductRequestDTO productRequestDTO) {
-        VendorModel vendor = vendorRepository.findByVendoruuid(vendorUuid)
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+        @Override
+        public ProductResponseDTO addProductToVendor(String vendorUuid, ProductRequestDTO productRequestDTO) {
+            VendorModel vendor = vendorRepository.findByVendoruuid(vendorUuid)
+                    .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
-        ProductModel product = modelMapper.map(productRequestDTO, ProductModel.class);
-        product.setVendor(vendor);
+            ProductModel product = modelMapper.map(productRequestDTO, ProductModel.class);
+            product.setVendor(vendor);
 
-        ProductModel savedProduct = productRepository.save(product);
-        return modelMapper.map(savedProduct, ProductResponseDTO.class);
-    }
+            ProductModel savedProduct = productRepository.save(product);
+            return modelMapper.map(savedProduct, ProductResponseDTO.class);
+        }
 
     @Override
     public List<ProductResponseDTO> findAllProductsByVendorUuid(String vendorUuid) {
@@ -115,6 +117,9 @@ public class ProductServiceImpl implements ProductService {
         Page<ProductModel> products = productRepository.search(keyword, pageable);
         return products.map(product -> modelMapper.map(product, ProductResponseDTO.class));
     }
+
+
+
 
 
 }

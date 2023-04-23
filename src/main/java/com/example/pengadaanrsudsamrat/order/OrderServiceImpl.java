@@ -1,11 +1,14 @@
 package com.example.pengadaanrsudsamrat.order;
-import com.example.pengadaanrsudsamrat.DTO.*;
+
+import com.example.pengadaanrsudsamrat.DTO.OrderItemRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderRequestDTO;
+import com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.DTO.PaymentDTO;
 import com.example.pengadaanrsudsamrat.exception.NotEnoughStockException;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemRepository;
 import com.example.pengadaanrsudsamrat.payment.PaymentModel;
 import com.example.pengadaanrsudsamrat.payment.PaymentRepository;
-
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,41 +62,6 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-    /*
-    @Override
-    public OrderItemResponseDTO createOrderItem(OrderItemRequestDTO orderItemRequestDTO) {
-        // Check if product exists
-        ProductModel productModel = productRepository.findById(orderItemRequestDTO.getProductId())
-                .orElseThrow(EntityNotFoundException::new);
-
-        // Check if there is enough quantity
-        if (productModel.getQuantity() < orderItemRequestDTO.getQuantity()) {
-            throw new IllegalArgumentException("Not enough quantity available");
-        }
-
-        // Get or create the order
-        OrderModel orderModel = orderRepository.findById(orderItemRequestDTO.getOrderItemid())
-                .orElseGet(() -> {
-                    OrderModel newOrderModel = new OrderModel();
-                    newOrderModel.setOrderDate(new Date());
-                    return orderRepository.save(newOrderModel);
-                });
-
-        // Create order item and set product, quantity and order
-        OrderItemModel orderItemModel = new OrderItemModel();
-        orderItemModel.setProduct(productModel);
-        orderItemModel.setQuantity(orderItemRequestDTO.getQuantity());
-        orderItemModel.setOrder(orderModel);
-
-        // Decrease product quantity
-        productModel.setQuantity(productModel.getQuantity() - orderItemRequestDTO.getQuantity());
-        productRepository.save(productModel);
-
-        // Save order item and return response
-        OrderItemModel savedOrderItemModel = orderItemRepository.save(orderItemModel);
-        return modelMapper.map(savedOrderItemModel, OrderItemResponseDTO.class);
-    }
-    */
 
     @Override
     public OrderResponseDTO updateOrderItemList(Long orderId, List<OrderItemRequestDTO> orderItemRequestDTOList) {

@@ -38,7 +38,7 @@ public class ProductModel {
     private int quantity;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_id")
     private VendorModel vendor;
 
@@ -52,6 +52,4 @@ public class ProductModel {
         String uniqueId = "PRD" + Instant.now().toEpochMilli() + uuid.toString().substring(0, 4).toUpperCase();
         setProductuuid(uniqueId);
     }
-
-
 }

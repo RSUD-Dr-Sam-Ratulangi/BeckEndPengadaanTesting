@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +39,23 @@ public class VendorModel {
     @JsonBackReference // marks the owning side of the relationship
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
+
+    public void setProducts(List<ProductModel> products) {
+        if (this.products == null) {
+            this.products = new ArrayList<>();
+        } else {
+            for (ProductModel product : new ArrayList<>(this.products)) {
+                product.setVendor(null);
+                this.products.remove(product);
+            }
+        }
+        if (products != null) {
+            for (ProductModel product : products) {
+                product.setVendor(this);
+                this.products.add(product);
+            }
+        }
+    }
 
     @PrePersist
     private void generateCustomId() {
