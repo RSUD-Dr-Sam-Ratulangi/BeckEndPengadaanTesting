@@ -1,11 +1,13 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import com.example.pengadaanrsudsamrat.DarkzillCustomHashMap;
+import com.example.pengadaanrsudsamrat.DarkzillCustomMergeSort;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
@@ -49,14 +51,14 @@ public class VendorServiceImpl implements VendorService {
         vendorModels.forEach(vendorModel -> vendorHashMap.put(vendorModel.getVendoruuid(), vendorModel));
     }
 
-    @Override
-    public VendorResponseDTO createVendor(VendorRequestDTO vendorRequestDTO) {
-        VendorModel vendorModel = modelMapper.map(vendorRequestDTO, VendorModel.class);
-        vendorModel.setProducts(null); // set the products field to null
-        VendorModel savedVendor = vendorRepository.save(vendorModel);
-        populateVendorHashMap();
-        return modelMapper.map(savedVendor, VendorResponseDTO.class);
-    }
+        @Override
+        public VendorResponseDTO createVendor(VendorRequestDTO vendorRequestDTO) {
+            VendorModel vendorModel = modelMapper.map(vendorRequestDTO, VendorModel.class);
+            vendorModel.setProducts(null); // set the products field to null
+            VendorModel savedVendor = vendorRepository.save(vendorModel);
+            populateVendorHashMap();
+            return modelMapper.map(savedVendor, VendorResponseDTO.class);
+        }
 
 
     @Override
@@ -73,11 +75,26 @@ public class VendorServiceImpl implements VendorService {
     public List<VendorResponseDTO> findAllVendors() {
         List<VendorModel> vendorModels = new ArrayList<>(vendorHashMap.size());
         vendorModels.addAll(vendorHashMap.values());
-        populateVendorHashMap();
+
         return vendorModels.stream()
                 .map(vendorModel -> modelMapper.map(vendorModel, VendorResponseDTO.class))
                 .collect(Collectors.toList());
     }
+/* test custom merge
+    @Override
+    public List<VendorResponseDTO> findAllVendors() {
+        List<VendorModel> vendorModels = new ArrayList<>(vendorHashMap.size());
+        vendorModels.addAll(vendorHashMap.values());
+        populateVendorHashMap();
+        VendorModel[] vendorArray = vendorModels.toArray(new VendorModel[0]);
+        DarkzillCustomMergeSort<VendorModel> mergeSort = new DarkzillCustomMergeSort<>();
+        mergeSort.sort(vendorArray);
+        return Arrays.stream(vendorArray)
+                .map(vendorModel -> modelMapper.map(vendorModel, VendorResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+    */
+
 /*
     @Override
     public List<VendorResponseDTO> findAllVendors() {

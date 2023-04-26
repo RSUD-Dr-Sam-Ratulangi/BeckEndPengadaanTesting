@@ -51,6 +51,12 @@ public class OrderController {
         return ResponseEntity.ok(orderResponseDTO);
     }
 
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+        List<OrderResponseDTO> orderResponseDTOs = orderService.getAllOrders();
+        return ResponseEntity.ok(orderResponseDTOs);
+    }
+
 
 
 

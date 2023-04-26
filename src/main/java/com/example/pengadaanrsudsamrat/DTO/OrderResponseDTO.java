@@ -14,7 +14,6 @@ import java.util.List;
 public class OrderResponseDTO {
 
     private Long id;
-
     private LocalDateTime orderDate;
     private List<OrderItemResponseDTO> orderItems;
     private PaymentDTO payment;

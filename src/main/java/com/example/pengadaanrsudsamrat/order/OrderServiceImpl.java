@@ -11,6 +11,7 @@ import com.example.pengadaanrsudsamrat.payment.PaymentModel;
 import com.example.pengadaanrsudsamrat.payment.PaymentRepository;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -218,6 +219,41 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponseDTO;
     }
+
+
+    @Override
+    @Nullable
+    public List<OrderResponseDTO> getAllOrders() {
+        List<OrderModel> orderModels = orderRepository.findAll();
+        if (orderModels.isEmpty()) {
+            return null;
+        }
+        List<OrderResponseDTO> orderResponseDTOs = new ArrayList<>();
+
+        for (OrderModel orderModel : orderModels) {
+            double totalAmount = 0.0;
+            for (OrderItemModel orderItemModel : orderModel.getOrderItems()) {
+                totalAmount += orderItemModel.getProduct().getPrice() * orderItemModel.getQuantity();
+            }
+
+            PaymentModel paymentModel = orderModel.getPayment();
+            if (paymentModel == null) {
+                throw new EntityNotFoundException("Payment not found for this order.");
+            }
+
+            PaymentDTO paymentDTO = modelMapper.map(paymentModel, PaymentDTO.class);
+            paymentDTO.setAmount(BigDecimal.valueOf(totalAmount));
+
+            OrderResponseDTO orderResponseDTO = modelMapper.map(orderModel, OrderResponseDTO.class);
+            orderResponseDTO.setPayment(paymentDTO);
+            orderResponseDTOs.add(orderResponseDTO);
+        }
+
+        return orderResponseDTOs;
+    }
+
+
+
 
 
 

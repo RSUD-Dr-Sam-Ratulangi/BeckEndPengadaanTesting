@@ -2,6 +2,7 @@ package com.example.pengadaanrsudsamrat.order;
 
 
 import com.example.pengadaanrsudsamrat.DTO.*;
+import jakarta.annotation.Nullable;
 
 
 import javax.validation.Valid;
@@ -14,6 +15,9 @@ public interface OrderService {
    // OrderResponseDTO addOrderItemToOrder(Long orderId, OrderAddItemRequestDTO orderAddItemRequestDTO);
     OrderResponseDTO addOrderItemsToOrder(Long orderId, List<OrderItemRequestDTO> orderItems);
     OrderResponseDTO getOrderById(Long orderId);
+    List<OrderResponseDTO>  getAllOrders();
+
+
 
 
     //OrderItemResponseDTO createOrderItem(OrderItemRequestDTO orderItemRequestDTO);
