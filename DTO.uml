@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.example.pengadaanrsudsamrat.DTO</OriginalElement>
+  <nodes>
+    <node x="4173.859177812656" y="1849.2863023396428">com.example.pengadaanrsudsamrat.DTO.CreateBidResponseDTO</node>
+    <node x="3597.5556592770404" y="1676.2930168790335">com.example.pengadaanrsudsamrat.DTO.VendorResponseDTO</node>
+    <node x="1890.6674005773239" y="-70.76526420605524">com.example.pengadaanrsudsamrat.DTO.PaymentDTO</node>
+    <node x="2520.0443559187056" y="2068.2613935728014">com.example.pengadaanrsudsamrat.DTO.VendorProductRequestDTO</node>
+    <node x="2209.7825311467113" y="457.01886571142563">com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO</node>
+    <node x="2597.8891335257745" y="988.0782452646483">com.example.pengadaanrsudsamrat.DTO.OrderItemResponseDTO</node>
+    <node x="2973.0" y="1407.5">com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO</node>
+    <node x="4828.166977831122" y="2015.8790506371004">com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.CreateBidResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.VendorResponseDTO" relationship="TO_ONE">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.VendorProductRequestDTO" target="com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO" relationship="TO_MANY">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.PaymentDTO" relationship="TO_ONE">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.VendorResponseDTO" relationship="TO_ONE">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.CreateBidResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO" relationship="TO_ONE">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.OrderItemResponseDTO" relationship="TO_MANY">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.example.pengadaanrsudsamrat.DTO.OrderItemResponseDTO" target="com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO" relationship="TO_ONE">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Radial" zoom="0.49088442498095963" showDependencies="true" x="3327.9596606060604" y="1435.2559999999999" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
