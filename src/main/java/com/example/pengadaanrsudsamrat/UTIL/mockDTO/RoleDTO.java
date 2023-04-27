@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.DTO;
+package com.example.pengadaanrsudsamrat.UTIL.mockDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.DTO;
+package com.example.pengadaanrsudsamrat.bid.DTO;
 
 import com.example.pengadaanrsudsamrat.ProductRequest.ProductRequestModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;

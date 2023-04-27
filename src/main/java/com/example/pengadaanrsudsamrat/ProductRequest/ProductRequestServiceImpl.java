@@ -1,6 +1,6 @@
 package com.example.pengadaanrsudsamrat.ProductRequest;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
+import com.example.pengadaanrsudsamrat.ProductRequest.DTO.ProductRequestRequestDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

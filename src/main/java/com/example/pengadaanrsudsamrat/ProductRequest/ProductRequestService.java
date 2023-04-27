@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.ProductRequest;
 
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestRequestDTO;
+import com.example.pengadaanrsudsamrat.ProductRequest.DTO.ProductRequestRequestDTO;
 
 import java.util.List;
 

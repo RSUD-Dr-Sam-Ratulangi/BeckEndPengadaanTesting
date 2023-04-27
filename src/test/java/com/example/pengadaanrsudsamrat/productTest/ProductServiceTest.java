@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.productTest;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO;
+import com.example.pengadaanrsudsamrat.products.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
 import com.example.pengadaanrsudsamrat.products.ProductService;
@@ -10,8 +10,6 @@ import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;

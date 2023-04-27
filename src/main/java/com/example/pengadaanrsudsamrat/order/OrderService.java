@@ -1,8 +1,10 @@
 package com.example.pengadaanrsudsamrat.order;
 
 
-import com.example.pengadaanrsudsamrat.DTO.*;
-import jakarta.annotation.Nullable;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 
 
 import javax.validation.Valid;
@@ -16,7 +18,9 @@ public interface OrderService {
     OrderResponseDTO addOrderItemsToOrder(Long orderId, List<OrderItemRequestDTO> orderItems);
     OrderResponseDTO getOrderById(Long orderId);
     List<OrderResponseDTO>  getAllOrders();
+    List<OrderResponseDTO> getOrdersByVendorId(Long vendorId);
 
+    List<OrderGroupByVendorResponseDTO> getOrdersByVendorId2(Long vendorId);
 
 
 

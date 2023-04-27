@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.exception;
+package com.example.pengadaanrsudsamrat.UTIL.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

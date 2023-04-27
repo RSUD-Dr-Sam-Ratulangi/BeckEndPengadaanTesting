@@ -1,12 +1,13 @@
 package com.example.pengadaanrsudsamrat.order;
 
-import com.example.pengadaanrsudsamrat.DTO.OrderItemRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.OrderRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO;
-import com.example.pengadaanrsudsamrat.DTO.PaymentDTO;
-import com.example.pengadaanrsudsamrat.exception.NotEnoughStockException;
+import com.example.pengadaanrsudsamrat.UTIL.exception.NotEnoughStockException;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemRepository;
+import com.example.pengadaanrsudsamrat.payment.DTO.PaymentDTO;
 import com.example.pengadaanrsudsamrat.payment.PaymentModel;
 import com.example.pengadaanrsudsamrat.payment.PaymentRepository;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -253,7 +255,38 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public List<OrderResponseDTO> getOrdersByVendorId(Long vendorId) {
+        List<OrderItemModel> orderItems = orderItemRepository.findByProduct_Vendor_Id(vendorId);
+        List<OrderModel> orders = orderRepository.findByOrderItemsIn(orderItems);
 
+        return orders.stream()
+                .map(order -> modelMapper.map(order, OrderResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderGroupByVendorResponseDTO> getOrdersByVendorId2(Long vendorId) {
+        List<OrderItemModel> orderItems = orderItemRepository.findByProduct_Vendor_Id(vendorId);
+        List<OrderModel> orders = orderRepository.findByOrderItemsIn(orderItems);
+
+        List<OrderGroupByVendorResponseDTO> responseList = new ArrayList<>();
+
+        for(OrderModel order: orders) {
+            for(OrderItemModel item: order.getOrderItems()) {
+                OrderGroupByVendorResponseDTO response = new OrderGroupByVendorResponseDTO();
+                response.setOrderId(order.getId());
+                response.setOrderDate(order.getOrderDate());
+                response.setQuantity(item.getQuantity());
+                response.setProductName(item.getProduct().getName());
+                response.setProductUuid(item.getProduct().getProductuuid());
+                response.setPrice(item.getProduct().getPrice());
+                responseList.add(response);
+            }
+        }
+
+        return responseList;
+    }
 
 
 

@@ -1,5 +1,7 @@
-package com.example.pengadaanrsudsamrat.DTO;
+package com.example.pengadaanrsudsamrat.bid.DTO;
 
+import com.example.pengadaanrsudsamrat.ProductRequest.DTO.ProductRequestRequestDTO;
+import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

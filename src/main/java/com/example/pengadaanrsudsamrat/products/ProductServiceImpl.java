@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.products;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO;
+import com.example.pengadaanrsudsamrat.products.DTO.ProductRequestDTO;
+import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorRepository;
 

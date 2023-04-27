@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.DTO;
+package com.example.pengadaanrsudsamrat.UTIL.mockDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

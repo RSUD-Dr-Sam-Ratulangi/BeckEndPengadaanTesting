@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.exception;
+package com.example.pengadaanrsudsamrat.UTIL.exception;
 
 public class NotEnoughStockException extends RuntimeException {
     public NotEnoughStockException(String message) {

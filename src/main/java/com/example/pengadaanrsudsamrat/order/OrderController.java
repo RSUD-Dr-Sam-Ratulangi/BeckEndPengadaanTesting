@@ -1,11 +1,10 @@
 package com.example.pengadaanrsudsamrat.order;
 
-import com.example.pengadaanrsudsamrat.DTO.OrderAddItemRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.OrderItemRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.OrderRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +54,16 @@ public class OrderController {
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
         List<OrderResponseDTO> orderResponseDTOs = orderService.getAllOrders();
         return ResponseEntity.ok(orderResponseDTOs);
+    }
+
+    @GetMapping("/{vendorId}/vendor")
+    public List<OrderResponseDTO> getOrdersByVendor(@PathVariable Long vendorId) {
+        return orderService.getOrdersByVendorId(vendorId);
+    }
+
+    @GetMapping("/{vendorId}/vendor2")
+    public List<OrderGroupByVendorResponseDTO> getOrdersByVendor2(@PathVariable Long vendorId) {
+        return orderService.getOrdersByVendorId2(vendorId);
     }
 
 

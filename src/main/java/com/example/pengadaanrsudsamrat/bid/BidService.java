@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.bid;
 
-import com.example.pengadaanrsudsamrat.DTO.BidDTO;
-import com.example.pengadaanrsudsamrat.DTO.CreateBidResponseDTO;
+import com.example.pengadaanrsudsamrat.bid.DTO.BidDTO;
+import com.example.pengadaanrsudsamrat.bid.DTO.CreateBidResponseDTO;
 
 import java.util.List;
 

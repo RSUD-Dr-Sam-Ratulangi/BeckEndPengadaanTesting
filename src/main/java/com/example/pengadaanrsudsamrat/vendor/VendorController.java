@@ -1,15 +1,12 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-import com.example.pengadaanrsudsamrat.DTO.ProductRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.ProductResponseDTO;
-import com.example.pengadaanrsudsamrat.DTO.VendorRequestDTO;
-import com.example.pengadaanrsudsamrat.DTO.VendorResponseDTO;
+import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorRequestDTO;
+import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/vendors")

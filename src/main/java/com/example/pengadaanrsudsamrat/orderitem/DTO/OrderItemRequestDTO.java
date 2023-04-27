@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.DTO;
+package com.example.pengadaanrsudsamrat.orderitem.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemResponseDTO {
+public class OrderItemRequestDTO {
 
-    private Long id;
+    private long orderItemid;
     private int quantity;
-    private ProductResponseDTO product;
+    private Long productId;
 
     // constructors, getters, and setters
 
