@@ -10,8 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-
-
+/**
+ * The type Bid model.
+ */
 @Entity
 @Table(name = "bids")
 @Data

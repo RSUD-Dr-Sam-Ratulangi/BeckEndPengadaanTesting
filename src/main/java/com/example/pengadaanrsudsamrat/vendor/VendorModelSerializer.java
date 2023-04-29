@@ -8,6 +8,9 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.IOException;
 
+/**
+ * The type Vendor model serializer.
+ */
 public class VendorModelSerializer extends JsonSerializer<VendorModel> {
 
     @Override

@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-
+/**
+ * The type Order item model.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

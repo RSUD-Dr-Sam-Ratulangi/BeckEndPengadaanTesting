@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Payment dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

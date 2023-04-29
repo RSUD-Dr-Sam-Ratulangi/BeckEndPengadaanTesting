@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The type Custom id generator vendor.
+ */
 @Component
 public class CustomIdGeneratorVendor {
 
@@ -14,6 +17,11 @@ public class CustomIdGeneratorVendor {
     private static final String PATTERN = PREFIX + DATE_FORMAT + "%04d";
     private AtomicInteger counter = new AtomicInteger(1);
 
+    /**
+     * Generate custom id string.
+     *
+     * @return the string
+     */
     public String generateCustomId() {
         String formattedDate = new SimpleDateFormat(DATE_FORMAT).format(new Date());
         int count = counter.getAndIncrement();

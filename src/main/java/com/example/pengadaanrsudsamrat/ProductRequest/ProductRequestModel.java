@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * The type Product request model.
+ */
 @Entity
 @Table(name = "product_request")
 @Data
@@ -44,10 +47,22 @@ public class ProductRequestModel {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
-    // constructors, getters, and setters
+    /**
+     * The enum Product request status.
+     */
+// constructors, getters, and setters
     public enum ProductRequestStatus {
+        /**
+         * Open product request status.
+         */
         OPEN,
+        /**
+         * Closed product request status.
+         */
         CLOSED,
+        /**
+         * Fulfilled product request status.
+         */
         FULFILLED
     }
 }

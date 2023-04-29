@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * The type Product model.
+ */
 @Entity
 @Table(name = "product")
 @Data

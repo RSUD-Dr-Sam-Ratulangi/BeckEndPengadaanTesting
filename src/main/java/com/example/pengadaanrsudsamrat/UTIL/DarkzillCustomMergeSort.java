@@ -1,6 +1,16 @@
-package com.example.pengadaanrsudsamrat;
+package com.example.pengadaanrsudsamrat.UTIL;
 
+/**
+ * The type Darkzill custom merge sort.
+ *
+ * @param <T> the type parameter
+ */
 public class DarkzillCustomMergeSort<T extends Comparable<T>> {
+    /**
+     * Sort.
+     *
+     * @param arr the arr
+     */
     public void sort(T[] arr) {
         if (arr == null || arr.length < 2) {
             return;

@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Vendor model.
+ */
 @Entity
 @Table(name = "vendor")
 @Data
@@ -40,6 +43,11 @@ public class VendorModel {
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductModel> products;
 
+    /**
+     * Sets products.
+     *
+     * @param products the products
+     */
     public void setProducts(List<ProductModel> products) {
         if (this.products == null) {
             this.products = new ArrayList<>();

@@ -15,6 +15,7 @@ import com.example.pengadaanrsudsamrat.products.ProductRepository;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Order service.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -34,6 +38,15 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
 
+    /**
+     * Instantiates a new Order service.
+     *
+     * @param orderRepository     the order repository
+     * @param orderItemRepository the order item repository
+     * @param paymentRepository   the payment repository
+     * @param modelMapper         the model mapper
+     * @param productRepository   the product repository
+     */
     public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository, PaymentRepository paymentRepository,
                             ModelMapper modelMapper, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
@@ -266,7 +279,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderGroupByVendorResponseDTO> getOrdersByVendorId2(Long vendorId) {
+    public Page<OrderGroupByVendorResponseDTO> getOrdersByVendorIdWithPagination(Long vendorId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "orderDate");
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         List<OrderItemModel> orderItems = orderItemRepository.findByProduct_Vendor_Id(vendorId);
         List<OrderModel> orders = orderRepository.findByOrderItemsIn(orderItems);
 
@@ -285,8 +301,13 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return responseList;
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), responseList.size());
+        Page<OrderGroupByVendorResponseDTO> pageResponse = new PageImpl<>(responseList.subList(start, end), pageable, responseList.size());
+
+        return pageResponse;
     }
+
 
 
 

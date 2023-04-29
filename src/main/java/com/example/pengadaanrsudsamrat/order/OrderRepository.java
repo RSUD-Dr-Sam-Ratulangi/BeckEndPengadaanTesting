@@ -8,9 +8,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The interface Order repository.
+ */
 @Repository
 public interface OrderRepository extends JpaRepository<OrderModel,Long> {
 
+    /**
+     * Find by order items in list.
+     *
+     * @param orderItems the order items
+     * @return the list
+     */
     List<OrderModel> findByOrderItemsIn(List<OrderItemModel> orderItems);
 
 }

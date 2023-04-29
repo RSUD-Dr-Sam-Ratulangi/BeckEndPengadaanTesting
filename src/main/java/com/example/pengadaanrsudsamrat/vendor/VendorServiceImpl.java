@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import com.example.pengadaanrsudsamrat.DarkzillCustomHashMap;
+import com.example.pengadaanrsudsamrat.UTIL.DarkzillCustomHashMap;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,9 @@ import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
 import com.example.pengadaanrsudsamrat.UTIL.exception.ResourceNotFoundException;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
 
+/**
+ * The type Vendor service.
+ */
 @Service
 @Transactional
 public class VendorServiceImpl implements VendorService {
@@ -26,6 +29,15 @@ public class VendorServiceImpl implements VendorService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
+    /**
+     * Instantiates a new Vendor service.
+     *
+     * @param vendorHashMap     the vendor hash map
+     * @param vendorHashMap2    the vendor hash map 2
+     * @param vendorRepository  the vendor repository
+     * @param productRepository the product repository
+     * @param modelMapper       the model mapper
+     */
     public VendorServiceImpl(DarkzillCustomHashMap<String, VendorModel> vendorHashMap, ConcurrentHashMap<String, VendorModel> vendorHashMap2, VendorRepository vendorRepository, ProductRepository productRepository, ModelMapper modelMapper) {
         this.vendorHashMap = vendorHashMap;
         this.vendorHashMap2 = vendorHashMap2;

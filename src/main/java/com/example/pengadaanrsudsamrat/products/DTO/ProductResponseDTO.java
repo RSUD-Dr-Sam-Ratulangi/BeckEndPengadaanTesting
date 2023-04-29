@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Product response dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponseDTO {
     private Long id;
-                    private String productuuid;
+    private String productuuid;
     private String name;
     private String description;
     private double price;

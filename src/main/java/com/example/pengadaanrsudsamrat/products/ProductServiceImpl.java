@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Product service.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -24,6 +27,13 @@ public class ProductServiceImpl implements ProductService {
     private final VendorRepository vendorRepository;
     private final ModelMapper modelMapper;
 
+    /**
+     * Instantiates a new Product service.
+     *
+     * @param productRepository the product repository
+     * @param vendorRepository  the vendor repository
+     * @param modelMapper       the model mapper
+     */
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, VendorRepository vendorRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;

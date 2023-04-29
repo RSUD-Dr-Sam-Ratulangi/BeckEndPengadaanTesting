@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Bid controller.
+ */
 @RestController
-@RequestMapping("/bids")
+@RequestMapping("/pengadaan/dev/v1/bids")
 public class BidController {
 
     private final BidService bidService;
@@ -29,6 +32,16 @@ public class BidController {
     private final ProductRequestRepository productRequestRepository;
     private final ModelMapper modelMapper;
 
+    /**
+     * Instantiates a new Bid controller.
+     *
+     * @param bidService               the bid service
+     * @param vendorRepository         the vendor repository
+     * @param bidRepository            the bid repository
+     * @param productRepository        the product repository
+     * @param productRequestRepository the product request repository
+     * @param modelMapper              the model mapper
+     */
     public BidController(BidService bidService, VendorRepository vendorRepository, BidRepository bidRepository, ProductRepository productRepository, ProductRequestRepository productRequestRepository, ModelMapper modelMapper) {
         this.bidService = bidService;
         this.vendorRepository = vendorRepository;
@@ -37,12 +50,25 @@ public class BidController {
 
         this.modelMapper = modelMapper;
     }
+
+    /**
+     * Gets bid by id.
+     *
+     * @param id the id
+     * @return the bid by id
+     */
     @GetMapping("/{id}")
     public BidModel getBidById(@PathVariable("id") Long id) {
         BidDTO bidDTO = bidService.getBidById(id);
         return modelMapper.map(bidDTO, BidModel.class);
     }
 
+    /**
+     * Gets all bids by product request id.
+     *
+     * @param productRequestId the product request id
+     * @return the all bids by product request id
+     */
     @GetMapping("/product/{productRequestId}")
     public List<BidResponseDTO> getAllBidsByProductRequestId(@PathVariable("productRequestId") Long productRequestId) {
         List<BidDTO> bidDTOs = bidService.getAllBidsByProductRequestId(productRequestId);
@@ -63,6 +89,12 @@ public class BidController {
     }
 
 
+    /**
+     * Create bid response entity.
+     *
+     * @param bidDTO the bid dto
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<CreateBidResponseDTO> createBid(@RequestBody BidDTO bidDTO) {
         if (bidDTO.getVendorId() == null) {
@@ -82,6 +114,13 @@ public class BidController {
     }
 
 
+    /**
+     * Update bid bid model.
+     *
+     * @param id       the id
+     * @param bidModel the bid model
+     * @return the bid model
+     */
     @PutMapping("/{id}")
     public BidModel updateBid(@PathVariable("id") Long id, @RequestBody BidModel bidModel) {
         BidModel bidToUpdate = bidRepository.findById(id)
@@ -96,11 +135,22 @@ public class BidController {
         return bidRepository.save(bidToUpdate);
     }
 
+    /**
+     * Delete bid.
+     *
+     * @param id the id
+     */
     @DeleteMapping("/{id}")
     public void deleteBid(@PathVariable("id") Long id) {
         bidService.deleteBid(id);
     }
 
+    /**
+     * Select winning bid bid model.
+     *
+     * @param bidId the bid id
+     * @return the bid model
+     */
     @PatchMapping("/{bidId}/select")
     public BidModel selectWinningBid(@PathVariable("bidId") Long bidId) {
         BidDTO selectedBidDTO = bidService.selectWinningBid(bidId);

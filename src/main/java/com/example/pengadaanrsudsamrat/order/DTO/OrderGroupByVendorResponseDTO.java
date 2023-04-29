@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * The type Order group by vendor response dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

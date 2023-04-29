@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Order model.
+ */
 @Entity
 @Table(name = "orders")
 @Data

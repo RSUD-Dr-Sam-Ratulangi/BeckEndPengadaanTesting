@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Create bid response dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

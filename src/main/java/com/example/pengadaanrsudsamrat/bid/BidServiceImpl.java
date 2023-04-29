@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Bid service.
+ */
 @Service
 public class BidServiceImpl implements BidService {
 
@@ -25,6 +28,15 @@ public class BidServiceImpl implements BidService {
 
     private final ProductRequestRepository productRequestRepository;
 
+    /**
+     * Instantiates a new Bid service.
+     *
+     * @param bidRepository          the bid repository
+     * @param modelMapper            the model mapper
+     * @param vendorRepository       the vendor repository
+     * @param productRepository      the product repository
+     * @param productRequestpository the product requestpository
+     */
     public BidServiceImpl(BidRepository bidRepository, ModelMapper modelMapper, VendorRepository vendorRepository, ProductRepository productRepository, ProductRequestRepository productRequestpository) {
         this.bidRepository = bidRepository;
         this.modelMapper = modelMapper;

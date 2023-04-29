@@ -90,53 +90,12 @@
             <version>2.10.1</version>
         </dependency>
 
-        <!--
-          <dependency>
-              <groupId>org.springframework.boot</groupId>
-              <artifactId>spring-boot-starter-security</artifactId>
-          </dependency>
-
-          <dependency>
-              <groupId>io.jsonwebtoken</groupId>
-              <artifactId>jjwt-api</artifactId>
-              <version>0.11.2</version>
-          </dependency>
-
-          <dependency>
-              <groupId>io.jsonwebtoken</groupId>
-              <artifactId>jjwt-impl</artifactId>
-              <version>0.11.2</version>
-              <scope>runtime</scope>
-          </dependency>
-
-          <dependency>
-              <groupId>io.jsonwebtoken</groupId>
-              <artifactId>jjwt-jackson</artifactId>
-              <version>0.11.2</version>
-              <scope>runtime</scope>
-          </dependency>
-
-  -->
 
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-            <version>5.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>5.5.1</version>
-        </dependency>
-
 
 
 
@@ -152,7 +111,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-
+<!--
                 <executions>
                     <execution>
                         <goals>
@@ -170,7 +129,7 @@
                         </exclude>
                     </excludes>
                 </configuration>
-
+-->
             </plugin>
 
             <plugin>

@@ -9,12 +9,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Product request service.
+ */
 @Service
 public class ProductRequestServiceImpl implements ProductRequestService {
 
     private final ProductRequestRepository productRequestRepository;
     private final ModelMapper modelMapper;
 
+    /**
+     * Instantiates a new Product request service.
+     *
+     * @param productRequestRepository the product request repository
+     * @param modelMapper              the model mapper
+     */
     @Autowired
     public ProductRequestServiceImpl(ProductRequestRepository productRequestRepository, ModelMapper modelMapper) {
         this.productRequestRepository = productRequestRepository;

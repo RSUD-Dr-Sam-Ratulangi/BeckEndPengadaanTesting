@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * The type Vendor product response dto.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
