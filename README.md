@@ -104,42 +104,54 @@ public class Example {
 
 All URIs are relative to *http://rsudsamrat.site:8080*
 
-Class | Method | HTTP request | Description
------------- | ------------- | ------------- | -------------
-*DefaultApi* | [**addOrderItemToOrder**](docs/DefaultApi.md#addOrderItemToOrder) | **POST** /pengadaan/dev/v1/orders/{orderId}/items | POST pengadaan/dev/v1/orders/{orderId}/items
-*DefaultApi* | [**addProductToVendor**](docs/DefaultApi.md#addProductToVendor) | **POST** /pengadaan/dev/v1/products/{vendorUuid} | POST pengadaan/dev/v1/products/{vendorUuid}
-*DefaultApi* | [**createBid**](docs/DefaultApi.md#createBid) | **POST** /pengadaan/dev/v1/bids | POST pengadaan/dev/v1/bids
-*DefaultApi* | [**createOrder**](docs/DefaultApi.md#createOrder) | **POST** /pengadaan/dev/v1/orders | POST pengadaan/dev/v1/orders
-*DefaultApi* | [**createOrderItem**](docs/DefaultApi.md#createOrderItem) | **POST** /pengadaan/dev/v1/orderitems | POST pengadaan/dev/v1/orderitems
-*DefaultApi* | [**createProductRequest**](docs/DefaultApi.md#createProductRequest) | **POST** /pengadaan/dev/v1//product-requests | POST pengadaan/dev/v1//product-requests
-*DefaultApi* | [**createVendor**](docs/DefaultApi.md#createVendor) | **POST** /vendors | POST vendors
-*DefaultApi* | [**deleteBid**](docs/DefaultApi.md#deleteBid) | **DELETE** /pengadaan/dev/v1/bids/{id} | DELETE pengadaan/dev/v1/bids/{id}
-*DefaultApi* | [**deleteOrderItemById**](docs/DefaultApi.md#deleteOrderItemById) | **DELETE** /pengadaan/dev/v1/orderitems/{id} | DELETE pengadaan/dev/v1/orderitems/{id}
-*DefaultApi* | [**deleteProductByUuid**](docs/DefaultApi.md#deleteProductByUuid) | **DELETE** /pengadaan/dev/v1/products/{uuid} | DELETE pengadaan/dev/v1/products/{uuid}
-*DefaultApi* | [**deleteProductRequest**](docs/DefaultApi.md#deleteProductRequest) | **DELETE** /pengadaan/dev/v1//product-requests/{id} | DELETE pengadaan/dev/v1//product-requests/{id}
-*DefaultApi* | [**deleteVendorByUuid**](docs/DefaultApi.md#deleteVendorByUuid) | **DELETE** /vendors/{vendorUuid} | DELETE vendors/{vendorUuid}
-*DefaultApi* | [**findVendorByUuid**](docs/DefaultApi.md#findVendorByUuid) | **GET** /vendors/{vendorUuid} | GET vendors/{vendorUuid}
-*DefaultApi* | [**getAllBidsByProductRequestId**](docs/DefaultApi.md#getAllBidsByProductRequestId) | **GET** /pengadaan/dev/v1/bids/product/{productRequestId} | GET pengadaan/dev/v1/bids/product/{productRequestId}
-*DefaultApi* | [**getAllOrderItems**](docs/DefaultApi.md#getAllOrderItems) | **GET** /pengadaan/dev/v1/orderitems | GET pengadaan/dev/v1/orderitems
-*DefaultApi* | [**getAllOrders**](docs/DefaultApi.md#getAllOrders) | **GET** /pengadaan/dev/v1/orders | GET pengadaan/dev/v1/orders
-*DefaultApi* | [**getAllProductRequests**](docs/DefaultApi.md#getAllProductRequests) | **GET** /pengadaan/dev/v1//product-requests | GET pengadaan/dev/v1//product-requests
-*DefaultApi* | [**getAllProducts**](docs/DefaultApi.md#getAllProducts) | **GET** /pengadaan/dev/v1/products/{page}/{size} | GET pengadaan/dev/v1/products/{page}/{size}
-*DefaultApi* | [**getAllProductsByVendorUuid**](docs/DefaultApi.md#getAllProductsByVendorUuid) | **GET** /pengadaan/dev/v1/products/vendor/{vendorUuid} | GET pengadaan/dev/v1/products/vendor/{vendorUuid}
-*DefaultApi* | [**getAllVendors**](docs/DefaultApi.md#getAllVendors) | **GET** /vendors | GET vendors
-*DefaultApi* | [**getBidById**](docs/DefaultApi.md#getBidById) | **GET** /pengadaan/dev/v1/bids/{id} | GET pengadaan/dev/v1/bids/{id}
-*DefaultApi* | [**getOrderById**](docs/DefaultApi.md#getOrderById) | **GET** /pengadaan/dev/v1/orders/{orderId} | GET pengadaan/dev/v1/orders/{orderId}
-*DefaultApi* | [**getOrderItemById**](docs/DefaultApi.md#getOrderItemById) | **GET** /pengadaan/dev/v1/orderitems/{id} | GET pengadaan/dev/v1/orderitems/{id}
-*DefaultApi* | [**getOrdersByVendor**](docs/DefaultApi.md#getOrdersByVendor) | **GET** /pengadaan/dev/v1/orders/{vendorId}/vendor | GET pengadaan/dev/v1/orders/{vendorId}/vendor
-*DefaultApi* | [**getOrdersByVendorIdWithPagination**](docs/DefaultApi.md#getOrdersByVendorIdWithPagination) | **GET** /pengadaan/dev/v1/orders/{vendorId}/{page}/{size} | GET pengadaan/dev/v1/orders/{vendorId}/{page}/{size}
-*DefaultApi* | [**getProductByUuid**](docs/DefaultApi.md#getProductByUuid) | **GET** /pengadaan/dev/v1/products/{uuid} | GET pengadaan/dev/v1/products/{uuid}
-*DefaultApi* | [**getProductRequestById**](docs/DefaultApi.md#getProductRequestById) | **GET** /pengadaan/dev/v1//product-requests/{id} | GET pengadaan/dev/v1//product-requests/{id}
-*DefaultApi* | [**searchProducts**](docs/DefaultApi.md#searchProducts) | **GET** /pengadaan/dev/v1/products/search | GET pengadaan/dev/v1/products/search
-*DefaultApi* | [**selectWinningBid**](docs/DefaultApi.md#selectWinningBid) | **PATCH** /pengadaan/dev/v1/bids/{bidId}/select | PATCH pengadaan/dev/v1/bids/{bidId}/select
-*DefaultApi* | [**updateBid**](docs/DefaultApi.md#updateBid) | **PUT** /pengadaan/dev/v1/bids/{id} | PUT pengadaan/dev/v1/bids/{id}
-*DefaultApi* | [**updateOrder**](docs/DefaultApi.md#updateOrder) | **PUT** /pengadaan/dev/v1/orders/{orderId} | PUT pengadaan/dev/v1/orders/{orderId}
-*DefaultApi* | [**updateProduct**](docs/DefaultApi.md#updateProduct) | **PUT** /pengadaan/dev/v1/products/{uuid} | PUT pengadaan/dev/v1/products/{uuid}
-*DefaultApi* | [**updateProductRequest**](docs/DefaultApi.md#updateProductRequest) | **PUT** /pengadaan/dev/v1//product-requests/{id} | PUT pengadaan/dev/v1//product-requests/{id}
-*DefaultApi* | [**updateVendorByUuid**](docs/DefaultApi.md#updateVendorByUuid) | **PUT** /vendors/{vendorUuid} | PUT vendors/{vendorUuid}
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**addOrderItemToOrder**](DefaultApi.md#addOrderItemToOrder) | **POST** /pengadaan/dev/v1/orders/{orderId}/items | POST pengadaan/dev/v1/orders/{orderId}/items
+[**addProductToVendor**](DefaultApi.md#addProductToVendor) | **POST** /pengadaan/dev/v1/products/{vendorUuid} | POST pengadaan/dev/v1/products/{vendorUuid}
+[**createBid**](DefaultApi.md#createBid) | **POST** /pengadaan/dev/v1/bids | POST pengadaan/dev/v1/bids
+[**createEmployee**](DefaultApi.md#createEmployee) | **POST** /employee | POST employee
+[**createOrder**](DefaultApi.md#createOrder) | **POST** /pengadaan/dev/v1/orders | POST pengadaan/dev/v1/orders
+[**createOrderItem**](DefaultApi.md#createOrderItem) | **POST** /pengadaan/dev/v1/orderitems | POST pengadaan/dev/v1/orderitems
+[**createProductRequest**](DefaultApi.md#createProductRequest) | **POST** /pengadaan/dev/v1//product-requests | POST pengadaan/dev/v1//product-requests
+[**createVendor**](DefaultApi.md#createVendor) | **POST** /pengadaan/dev/v1/vendors | POST pengadaan/dev/v1/vendors
+[**deleteBid**](DefaultApi.md#deleteBid) | **DELETE** /pengadaan/dev/v1/bids/{id} | DELETE pengadaan/dev/v1/bids/{id}
+[**deleteOrderById**](DefaultApi.md#deleteOrderById) | **DELETE** /pengadaan/dev/v1/orders/{id} | DELETE pengadaan/dev/v1/orders/{id}
+[**deleteOrderItemById**](DefaultApi.md#deleteOrderItemById) | **DELETE** /pengadaan/dev/v1/orderitems/{id} | DELETE pengadaan/dev/v1/orderitems/{id}
+[**deleteProductByUuid**](DefaultApi.md#deleteProductByUuid) | **DELETE** /pengadaan/dev/v1/products/{uuid} | DELETE pengadaan/dev/v1/products/{uuid}
+[**deleteProductRequest**](DefaultApi.md#deleteProductRequest) | **DELETE** /pengadaan/dev/v1//product-requests/{id} | DELETE pengadaan/dev/v1//product-requests/{id}
+[**deleteVendorByUuid**](DefaultApi.md#deleteVendorByUuid) | **DELETE** /pengadaan/dev/v1/vendors/{vendorUuid} | DELETE pengadaan/dev/v1/vendors/{vendorUuid}
+[**findVendorByUuid**](DefaultApi.md#findVendorByUuid) | **GET** /pengadaan/dev/v1/vendors/{vendorUuid} | GET pengadaan/dev/v1/vendors/{vendorUuid}
+[**getAllBidsByProductRequestId**](DefaultApi.md#getAllBidsByProductRequestId) | **GET** /pengadaan/dev/v1/bids/product/{productRequestId} | GET pengadaan/dev/v1/bids/product/{productRequestId}
+[**getAllOrderItemDetails**](DefaultApi.md#getAllOrderItemDetails) | **GET** /pengadaan/dev/v1/orders/orders/items/details | GET pengadaan/dev/v1/orders/orders/items/details
+[**getAllOrderItems**](DefaultApi.md#getAllOrderItems) | **GET** /pengadaan/dev/v1/orderitems | GET pengadaan/dev/v1/orderitems
+[**getAllOrderItemsInOrders**](DefaultApi.md#getAllOrderItemsInOrders) | **GET** /pengadaan/dev/v1/orders/orders/items | GET pengadaan/dev/v1/orders/orders/items
+[**getAllOrderItemsWithProductStock**](DefaultApi.md#getAllOrderItemsWithProductStock) | **GET** /pengadaan/dev/v1/orders/orders/items/product-stock | GET pengadaan/dev/v1/orders/orders/items/product-stock
+[**getAllOrders**](DefaultApi.md#getAllOrders) | **GET** /pengadaan/dev/v1/orders | GET pengadaan/dev/v1/orders
+[**getAllProductRequests**](DefaultApi.md#getAllProductRequests) | **GET** /pengadaan/dev/v1//product-requests | GET pengadaan/dev/v1//product-requests
+[**getAllProducts**](DefaultApi.md#getAllProducts) | **GET** /pengadaan/dev/v1/products/{page}/{size} | GET pengadaan/dev/v1/products/{page}/{size}
+[**getAllProductsByVendorUuid**](DefaultApi.md#getAllProductsByVendorUuid) | **GET** /pengadaan/dev/v1/products/vendor/{vendorUuid} | GET pengadaan/dev/v1/products/vendor/{vendorUuid}
+[**getAllVendors**](DefaultApi.md#getAllVendors) | **GET** /pengadaan/dev/v1/vendors | GET pengadaan/dev/v1/vendors
+[**getBidById**](DefaultApi.md#getBidById) | **GET** /pengadaan/dev/v1/bids/{id} | GET pengadaan/dev/v1/bids/{id}
+[**getOrderById**](DefaultApi.md#getOrderById) | **GET** /pengadaan/dev/v1/orders/{orderId} | GET pengadaan/dev/v1/orders/{orderId}
+[**getOrderItemById**](DefaultApi.md#getOrderItemById) | **GET** /pengadaan/dev/v1/orderitems/{id} | GET pengadaan/dev/v1/orderitems/{id}
+[**getOrderItemProductInOrderRevenueAndStock**](DefaultApi.md#getOrderItemProductInOrderRevenueAndStock) | **GET** /pengadaan/dev/v1/orders/revenue-and-stock | GET pengadaan/dev/v1/orders/revenue-and-stock
+[**getOrdersByVendor**](DefaultApi.md#getOrdersByVendor) | **GET** /pengadaan/dev/v1/orders/{vendorId}/vendor | GET pengadaan/dev/v1/orders/{vendorId}/vendor
+[**getOrdersByVendorIdWithPagination**](DefaultApi.md#getOrdersByVendorIdWithPagination) | **GET** /pengadaan/dev/v1/orders/{vendorId}/{page}/{size} | GET pengadaan/dev/v1/orders/{vendorId}/{page}/{size}
+[**getProductByUuid**](DefaultApi.md#getProductByUuid) | **GET** /pengadaan/dev/v1/products/{uuid} | GET pengadaan/dev/v1/products/{uuid}
+[**getProductRequestById**](DefaultApi.md#getProductRequestById) | **GET** /pengadaan/dev/v1//product-requests/{id} | GET pengadaan/dev/v1//product-requests/{id}
+[**getVendorByOwnerId**](DefaultApi.md#getVendorByOwnerId) | **GET** /pengadaan/dev/v1/vendors/owner/{ownerId} | GET pengadaan/dev/v1/vendors/owner/{ownerId}
+[**getVendorProductRevenue**](DefaultApi.md#getVendorProductRevenue) | **GET** /pengadaan/dev/v1/orders/{vendorUUID}/revenue | GET pengadaan/dev/v1/orders/{vendorUUID}/revenue
+[**login**](DefaultApi.md#login) | **POST** /employee/login | POST employee/login
+[**searchOrdersByKeyword**](DefaultApi.md#searchOrdersByKeyword) | **GET** /pengadaan/dev/v1/orders/orders/search | GET pengadaan/dev/v1/orders/orders/search
+[**searchProducts**](DefaultApi.md#searchProducts) | **GET** /pengadaan/dev/v1/products/search | GET pengadaan/dev/v1/products/search
+[**searchVendorsByName**](DefaultApi.md#searchVendorsByName) | **GET** /pengadaan/dev/v1/vendors/search | GET pengadaan/dev/v1/vendors/search
+[**selectWinningBid**](DefaultApi.md#selectWinningBid) | **PATCH** /pengadaan/dev/v1/bids/{bidId}/select | PATCH pengadaan/dev/v1/bids/{bidId}/select
+[**updateBid**](DefaultApi.md#updateBid) | **PUT** /pengadaan/dev/v1/bids/{id} | PUT pengadaan/dev/v1/bids/{id}
+[**updateOrder**](DefaultApi.md#updateOrder) | **PUT** /pengadaan/dev/v1/orders/{orderId} | PUT pengadaan/dev/v1/orders/{orderId}
+[**updateProduct**](DefaultApi.md#updateProduct) | **PUT** /pengadaan/dev/v1/products/{uuid} | PUT pengadaan/dev/v1/products/{uuid}
+[**updateProductRequest**](DefaultApi.md#updateProductRequest) | **PUT** /pengadaan/dev/v1//product-requests/{id} | PUT pengadaan/dev/v1//product-requests/{id}
+[**updateVendorByUuid**](DefaultApi.md#updateVendorByUuid) | **PUT** /pengadaan/dev/v1/vendors/{vendorUuid} | PUT pengadaan/dev/v1/vendors/{vendorUuid}
+
 
 
 ## Documentation for Models
