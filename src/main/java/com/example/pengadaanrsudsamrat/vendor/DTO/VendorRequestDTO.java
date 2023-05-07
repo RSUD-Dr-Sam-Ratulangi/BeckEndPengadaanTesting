@@ -1,7 +1,8 @@
-package com.example.pengadaanrsudsamrat.UTIL.mockDTO;
+package com.example.pengadaanrsudsamrat.vendor.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,6 @@ public class VendorRequestDTO {
 
     @Pattern(regexp = "\\d{12}", message = "Phone number must be 10 digits")
     private String phoneNumber;
+
+
 }

@@ -1,7 +1,9 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorRequestDTO;
-import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
+import com.example.pengadaanrsudsamrat.users.DTO.OwnerResponseDTO;
+import com.example.pengadaanrsudsamrat.users.OwnerService;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorRequestDTO;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +18,17 @@ import java.util.List;
 public class VendorController {
 
     private final VendorService vendorService;
+    private final OwnerService ownerService;
 
     /**
      * Instantiates a new Vendor controller.
      *
      * @param vendorService the vendor service
+     * @param ownerService
      */
-    public VendorController(VendorService vendorService) {
+    public VendorController(VendorService vendorService, OwnerService ownerService) {
         this.vendorService = vendorService;
+        this.ownerService = ownerService;
     }
 
     /**
@@ -49,6 +54,10 @@ public class VendorController {
         VendorResponseDTO createdVendor = vendorService.createVendor(vendorRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdVendor);
     }
+
+
+
+
 
     /**
      * Find vendor by uuid response entity.

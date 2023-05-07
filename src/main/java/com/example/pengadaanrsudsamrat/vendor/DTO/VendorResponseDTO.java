@@ -1,7 +1,6 @@
-package com.example.pengadaanrsudsamrat.UTIL.mockDTO;
+package com.example.pengadaanrsudsamrat.vendor.DTO;
 
-
-
+import com.example.pengadaanrsudsamrat.users.DTO.OwnerResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,6 @@ public class VendorResponseDTO {
     private String name;
     private String address;
     private String phoneNumber;
-
+    private OwnerResponseDTO owner;
 }
+

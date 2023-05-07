@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.UTIL;
+/*package com.example.pengadaanrsudsamrat.UTIL;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -37,3 +37,4 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         }
     }
 }
+*/

@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.UTIL;
+/**package com.example.pengadaanrsudsamrat.UTIL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,3 +17,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 }
 
+*/

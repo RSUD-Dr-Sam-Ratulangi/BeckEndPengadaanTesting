@@ -3,7 +3,7 @@ package com.example.pengadaanrsudsamrat.bid;
 import com.example.pengadaanrsudsamrat.bid.DTO.BidDTO;
 import com.example.pengadaanrsudsamrat.bid.DTO.CreateBidResponseDTO;
 import com.example.pengadaanrsudsamrat.ProductRequest.DTO.ProductRequestRequestDTO;
-import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
 import com.example.pengadaanrsudsamrat.ProductRequest.ProductRequestModel;
 import com.example.pengadaanrsudsamrat.ProductRequest.ProductRequestRepository;
 import com.example.pengadaanrsudsamrat.UTIL.exception.ResourceNotFoundException;

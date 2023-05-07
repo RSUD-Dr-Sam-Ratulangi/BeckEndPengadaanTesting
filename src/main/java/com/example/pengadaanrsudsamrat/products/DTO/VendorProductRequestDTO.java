@@ -1,4 +1,4 @@
-package com.example.pengadaanrsudsamrat.vendor.DTO;
+package com.example.pengadaanrsudsamrat.products.DTO;
 
 import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import lombok.AllArgsConstructor;

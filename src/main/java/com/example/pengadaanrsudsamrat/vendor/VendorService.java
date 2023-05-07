@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorRequestDTO;
-import com.example.pengadaanrsudsamrat.UTIL.mockDTO.VendorResponseDTO;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorRequestDTO;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
 
 import java.util.List;
 
