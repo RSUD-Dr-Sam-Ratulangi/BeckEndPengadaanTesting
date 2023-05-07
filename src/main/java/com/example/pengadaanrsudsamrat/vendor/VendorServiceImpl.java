@@ -1,7 +1,7 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -11,8 +11,11 @@ import com.example.pengadaanrsudsamrat.users.DTO.OwnerResponseDTO;
 import com.example.pengadaanrsudsamrat.users.OwnerModel;
 
 import com.example.pengadaanrsudsamrat.users.OwnerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,7 @@ public class VendorServiceImpl implements VendorService {
     private final ProductRepository productRepository;
     private final OwnerRepository ownerModelRepository;
     private final ModelMapper modelMapper;
+    private final OwnerRepository ownerRepository;
 
     /**
      * Instantiates a new Vendor service.
@@ -44,8 +48,9 @@ public class VendorServiceImpl implements VendorService {
      * @param productRepository    the product repository
      * @param ownerModelRepository
      * @param modelMapper          the model mapper
+     * @param ownerRepository
      */
-    public VendorServiceImpl(DarkzillCustomHashMap<String, VendorModel> vendorHashMap, ConcurrentHashMap<String, VendorModel> vendorHashMap2, VendorRepository vendorRepository, ProductRepository productRepository, OwnerRepository ownerModelRepository, ModelMapper modelMapper) {
+    public VendorServiceImpl(DarkzillCustomHashMap<String, VendorModel> vendorHashMap, ConcurrentHashMap<String, VendorModel> vendorHashMap2, VendorRepository vendorRepository, ProductRepository productRepository, OwnerRepository ownerModelRepository, ModelMapper modelMapper, OwnerRepository ownerRepository) {
         this.vendorHashMap = vendorHashMap;
         this.vendorHashMap2 = vendorHashMap2;
         this.vendorRepository = vendorRepository;
@@ -53,6 +58,7 @@ public class VendorServiceImpl implements VendorService {
         this.ownerModelRepository = ownerModelRepository;
 
         this.modelMapper = modelMapper;
+        this.ownerRepository = ownerRepository;
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
         // Populate the vendorHashMap upon initialization
@@ -60,10 +66,6 @@ public class VendorServiceImpl implements VendorService {
         populateVendorHashMap();
     }
 
-    /*private void populateVendorHashMap2() {
-        List<VendorModel> vendorModels = vendorRepository.findAll();
-        vendorModels.forEach(vendorModel -> vendorHashMap2.put(vendorModel.getVendoruuid(), vendorModel));
-    }*/
 
     private void populateVendorHashMap() {
         List<VendorModel> vendorModels = vendorRepository.findAll();
@@ -111,14 +113,18 @@ public class VendorServiceImpl implements VendorService {
 
 
     @Override
-    public List<VendorResponseDTO> findAllVendors() {
-        List<VendorModel> vendorModels = new ArrayList<>(vendorHashMap.size());
-        vendorModels.addAll(vendorHashMap.values());
+    public List<VendorResponseDTO> findAllVendors(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<VendorModel> vendorPage = vendorRepository.findAll(pageRequest);
+        List<VendorModel> vendorModels = vendorPage.getContent();
 
         return vendorModels.stream()
                 .map(vendorModel -> modelMapper.map(vendorModel, VendorResponseDTO.class))
                 .collect(Collectors.toList());
     }
+
+
+
 
 
     @Override
@@ -133,11 +139,38 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public void deleteVendorByUuid(String vendorUuid) {
-        VendorModel vendorModel = vendorRepository.findByVendoruuid(vendorUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found with uuid: " + vendorUuid));
+    public VendorResponseDTO deleteVendorByUuid(String uuid) {
+        VendorModel vendorModel = vendorRepository.findByVendoruuid(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found with uuid: " + uuid));
+        VendorResponseDTO deletedVendor = modelMapper.map(vendorModel, VendorResponseDTO.class);
         vendorRepository.delete(vendorModel);
+        return deletedVendor;
     }
+
+
+
+
+    // In VendorServiceImpl class
+    @Override
+    public List<VendorResponseDTO> searchVendorsByName(String name) {
+        List<VendorModel> vendorModels = vendorRepository.findByNameContainingIgnoreCase(name);
+        return vendorModels.stream()
+                .map(vendorModel -> modelMapper.map(vendorModel, VendorResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public VendorResponseDTO findVendorByOwnerId(Long ownerId) {
+        Optional<VendorModel> vendorModelOptional = vendorRepository.findByOwner_Id(ownerId);
+
+        if (vendorModelOptional.isPresent()) {
+            VendorModel vendorModel = vendorModelOptional.get();
+            return modelMapper.map(vendorModel, VendorResponseDTO.class);
+        } else {
+            throw new RuntimeException("Vendor not found");
+        }
+    }
+
 
 
 

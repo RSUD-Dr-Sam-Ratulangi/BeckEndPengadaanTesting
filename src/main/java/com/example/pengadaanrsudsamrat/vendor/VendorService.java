@@ -14,7 +14,7 @@ public interface VendorService {
      *
      * @return the list
      */
-    List<VendorResponseDTO> findAllVendors();
+    List<VendorResponseDTO> findAllVendors(int page, int size);
 
     /**
      * Find vendor by uuid vendor response dto.
@@ -41,11 +41,10 @@ public interface VendorService {
      */
     VendorResponseDTO updateVendorByUuid(String vendorUuid, VendorRequestDTO vendorRequestDTO);
 
-    /**
-     * Delete vendor by uuid.
-     *
-     * @param vendorUuid the vendor uuid
-     */
-    void deleteVendorByUuid(String vendorUuid);
+
+    VendorResponseDTO deleteVendorByUuid(String uuid);
+    List<VendorResponseDTO> searchVendorsByName(String name);
+    VendorResponseDTO findVendorByOwnerId(Long ownerId);
+
 
 }

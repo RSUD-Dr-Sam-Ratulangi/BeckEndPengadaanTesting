@@ -1,9 +1,11 @@
 package com.example.pengadaanrsudsamrat.vendor;
 
 
+import com.example.pengadaanrsudsamrat.users.OwnerModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,4 +28,9 @@ public interface VendorRepository extends JpaRepository <VendorModel,Long> {
      * @return the optional
      */
     Optional<VendorModel> findByVendoruuid(String vendorUuid);
+
+
+    List<VendorModel> findByNameContainingIgnoreCase(String name);
+
+    Optional<VendorModel> findByOwner_Id(Long id);
 }

@@ -14,7 +14,7 @@ import java.util.List;
  * The type Vendor controller.
  */
 @RestController
-@RequestMapping("/vendors")
+@RequestMapping("/pengadaan/dev/v1/vendors")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -37,10 +37,13 @@ public class VendorController {
      * @return the all vendors
      */
     @GetMapping
-    public ResponseEntity<List<VendorResponseDTO>> getAllVendors() {
-        List<VendorResponseDTO> vendors = vendorService.findAllVendors();
+    public ResponseEntity<List<VendorResponseDTO>> getAllVendors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<VendorResponseDTO> vendors = vendorService.findAllVendors(page, size);
         return ResponseEntity.ok(vendors);
     }
+
 
 
     /**
@@ -91,9 +94,27 @@ public class VendorController {
      * @return the response entity
      */
     @DeleteMapping("/{vendorUuid}")
-    public ResponseEntity<Void> deleteVendorByUuid(@PathVariable String vendorUuid) {
-        vendorService.deleteVendorByUuid(vendorUuid);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<VendorResponseDTO> deleteVendorByUuid(@PathVariable String vendorUuid) {
+        VendorResponseDTO deletedVendor = vendorService.deleteVendorByUuid(vendorUuid);
+        return ResponseEntity.ok(deletedVendor);
     }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<VendorResponseDTO>> searchVendorsByName(@RequestParam String name) {
+        List<VendorResponseDTO> vendorResponseDTOs = vendorService.searchVendorsByName(name);
+        return ResponseEntity.ok(vendorResponseDTOs);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<VendorResponseDTO> getVendorByOwnerId(@PathVariable Long ownerId) {
+        try {
+            VendorResponseDTO vendorResponseDTO = vendorService.findVendorByOwnerId(ownerId);
+            return ResponseEntity.ok().body(vendorResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }
