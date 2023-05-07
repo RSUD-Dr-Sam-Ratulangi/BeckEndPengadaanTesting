@@ -21,5 +21,9 @@ public interface OrderRepository extends JpaRepository<OrderModel,Long> {
      * @return the list
      */
     List<OrderModel> findByOrderItemsIn(List<OrderItemModel> orderItems);
+    List<OrderModel> findByOrderItemsProductVendorNameContainingIgnoreCaseOrOrderItemsProductNameContainingIgnoreCase(String vendorName, String productName);
 
+    List<OrderModel> findByOrderItemsProductNameContainingIgnoreCase(String productName);
+
+    List<OrderModel> findByOrderItemsProductVendorNameContainingIgnoreCase(String vendorName);
 }

@@ -33,4 +33,18 @@ public class OwnerServiceImpl implements OwnerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found with id: " + id));
         return modelMapper.map(ownerModel, OwnerResponseDTO.class);
     }
+
+    @Override
+    public OwnerResponseDTO login(OwnerRequestDTO ownerRequestDTO) {
+        Object object = ownerRepository.findByUsernameAndPassword(ownerRequestDTO.getUsername(), ownerRequestDTO.getPassword())
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid credentials"));
+
+        if(object instanceof OwnerModel ownerModel) {
+            return modelMapper.map(ownerModel, OwnerResponseDTO.class);
+        } else {
+            throw new ResourceNotFoundException("Invalid credentials");
+        }
+    }
+
+
 }

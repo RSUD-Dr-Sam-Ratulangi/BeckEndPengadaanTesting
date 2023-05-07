@@ -1,28 +1,30 @@
 package com.example.pengadaanrsudsamrat.order;
 
 import com.example.pengadaanrsudsamrat.UTIL.exception.NotEnoughStockException;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.UTIL.exception.OrderNotFoundException;
+import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemRepository;
 import com.example.pengadaanrsudsamrat.payment.DTO.PaymentDTO;
 import com.example.pengadaanrsudsamrat.payment.PaymentModel;
 import com.example.pengadaanrsudsamrat.payment.PaymentRepository;
+import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import com.example.pengadaanrsudsamrat.products.ProductModel;
 import com.example.pengadaanrsudsamrat.products.ProductRepository;
+import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
+import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -307,6 +309,233 @@ public class OrderServiceImpl implements OrderService {
 
         return pageResponse;
     }
+
+
+    //Filter all Order Item in Order
+    @Override
+    public Page<OrderItemInOrderResponseDTO> getAllOrderItemsInOrders(int page, int size, String sortBy) {
+        if (sortBy == null) {
+            sortBy = "orderDate"; // Set default sort order to orderDate
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Page<OrderModel> orders = orderRepository.findAll(pageable);
+
+        List<OrderItemInOrderResponseDTO> orderItemDTOList = new ArrayList<>();
+        for (OrderModel orderModel : orders) {
+            List<OrderItemModel> orderItems = orderModel.getOrderItems();
+            for (OrderItemModel orderItem : orderItems) {
+                OrderItemInOrderResponseDTO orderItemDTO = new OrderItemInOrderResponseDTO();
+                orderItemDTO.setOrderId(orderModel.getId());
+                orderItemDTO.setOrderItemId(orderItem.getId());
+
+                if (orderItem.getProduct() != null) {
+                    if (orderItem.getProduct().getVendor() != null) {
+                        orderItemDTO.setVendorId(orderItem.getProduct().getVendor().getId());
+                    }
+                    orderItemDTO.setProductId(orderItem.getProduct().getId());
+                    orderItemDTO.setProductQuantity(orderItem.getProduct().getQuantity());
+                    BigDecimal amountPerItem = BigDecimal.valueOf(orderItem.getProduct().getPrice());
+                    orderItemDTO.setAmountPerItem(amountPerItem);
+                } else {
+                    orderItemDTO.setVendorId(null);
+                    orderItemDTO.setProductId(null);
+                    orderItemDTO.setProductQuantity(0);
+                    orderItemDTO.setAmountPerItem(null);
+                }
+
+                orderItemDTO.setOrderItemQuantity(orderItem.getQuantity());
+                orderItemDTO.setOrderDate(orderModel.getOrderDate());
+                orderItemDTOList.add(orderItemDTO);
+            }
+        }
+
+        return new PageImpl<>(orderItemDTOList, pageable, orderItemDTOList.size());
+    }
+
+
+    //Filter all Order Item in Order
+    @Override
+    public Page<OrderItemInOrderDetailResponseDTO> getAllOrderItemsInOrderDetails(int page, int size, String sortBy) {
+        if (sortBy == null) {
+            sortBy = "orderDate"; // Set default sort order to orderDate
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Page<OrderModel> orders = orderRepository.findAll(pageable);
+
+        List<OrderItemInOrderDetailResponseDTO> orderItemDTOList = new ArrayList<>();
+        for (OrderModel orderModel : orders) {
+            List<OrderItemModel> orderItems = orderModel.getOrderItems();
+            for (OrderItemModel orderItem : orderItems) {
+                OrderItemInOrderDetailResponseDTO orderItemDTO = new OrderItemInOrderDetailResponseDTO();
+                orderItemDTO.setOrderId(orderModel.getId());
+                orderItemDTO.setOrderItemId(orderItem.getId());
+                orderItemDTO.setOrderItemQuantity(orderItem.getQuantity());
+                orderItemDTO.setAmountPerItem(BigDecimal.valueOf(orderItem.getProduct().getPrice()));
+                orderItemDTO.setOrderDate(orderModel.getOrderDate());
+
+                ProductModel product = orderItem.getProduct();
+                if (product != null) {
+                    ProductResponseDTO productDTO = new ProductResponseDTO();
+                    productDTO.setId(product.getId());
+                    productDTO.setName(product.getName());
+                    productDTO.setDescription(product.getDescription());
+                    productDTO.setPrice(product.getPrice());
+                    productDTO.setQuantity(product.getQuantity());
+                    VendorModel vendor = product.getVendor();
+                    if (vendor != null) {
+                        VendorResponseDTO vendorDTO = new VendorResponseDTO();
+                        vendorDTO.setId(vendor.getId());
+                        vendorDTO.setName(vendor.getName());
+                        vendorDTO.setAddress(vendor.getAddress());
+                        vendorDTO.setPhoneNumber(vendor.getPhone());
+                        productDTO.setVendor(vendorDTO);
+                    }
+                    orderItemDTO.setProduct(productDTO);
+                }
+
+                orderItemDTOList.add(orderItemDTO);
+            }
+        }
+
+        return new PageImpl<>(orderItemDTOList, pageable, orderItemDTOList.size());
+    }
+
+
+
+//pertukaran stock dan pembelian
+    @Override
+    public Page<OrderItemQuantityExchangeResponseDTO> getAllOrderItemsWithProductStock(int page, int size, String sortBy) {
+        if (sortBy == null) {
+            sortBy = "orderDate"; // Set default sort order to orderDate
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Page<OrderModel> orders = orderRepository.findAll(pageable);
+
+        List<OrderItemQuantityExchangeResponseDTO> orderItemDTOList = new ArrayList<>();
+        for (OrderModel orderModel : orders) {
+            List<OrderItemModel> orderItems = orderModel.getOrderItems();
+            for (OrderItemModel orderItem : orderItems) {
+                OrderItemQuantityExchangeResponseDTO orderItemDTO = new OrderItemQuantityExchangeResponseDTO();
+                orderItemDTO.setOrderId(orderModel.getId());
+                orderItemDTO.setOrderItemId(orderItem.getId());
+                if (orderItem.getProduct() != null) {
+                    if (orderItem.getProduct().getVendor() != null) {
+                        orderItemDTO.setVendor(modelMapper.map(orderItem.getProduct().getVendor(), VendorResponseDTO.class));
+                    }
+                    orderItemDTO.setProduct(modelMapper.map(orderItem.getProduct(), ProductResponseDTO.class));
+                    orderItemDTO.setProductQuantity(orderItem.getProduct().getQuantity());
+                    orderItemDTO.setProductTotalStock(orderItem.getProduct().getQuantity() - orderItem.getQuantity());
+                }
+                orderItemDTO.setOrderItemQuantity(orderItem.getQuantity());
+                orderItemDTO.setOrderDate(orderModel.getOrderDate());
+                orderItemDTOList.add(orderItemDTO);
+            }
+        }
+
+        return new PageImpl<>(orderItemDTOList, pageable, orderItemDTOList.size());
+    }
+
+
+
+
+    @Override
+    public List<OrderItemProductInOrderRavanueAndStockResponseDTO> getOrderItemProductInOrderRevenueAndStock(Long productId) {
+        List<OrderItemProductInOrderRavanueAndStockResponseDTO> result = new ArrayList<>();
+        List<OrderItemModel> orderItems;
+        if (productId == null) {
+            orderItems = orderItemRepository.findAll();
+        } else {
+            orderItems = orderItemRepository.findByProductId(productId);
+        }
+
+        Map<String, OrderItemProductInOrderRavanueAndStockResponseDTO> productMap = new HashMap<>();
+
+        for (OrderItemModel orderItem : orderItems) {
+            String productKey = orderItem.getProduct().getId().toString();
+            if (productMap.containsKey(productKey)) {
+                OrderItemProductInOrderRavanueAndStockResponseDTO itemDTO = productMap.get(productKey);
+                itemDTO.setOrderItemQuantity(itemDTO.getOrderItemQuantity() + orderItem.getQuantity());
+                itemDTO.setProductTotalStock(itemDTO.getProductTotalStock() + orderItem.getQuantity());
+                Double orderItemRevenue = orderItem.getQuantity() * orderItem.getProduct().getPrice();
+                itemDTO.setTotalRevenue(itemDTO.getTotalRevenue() + orderItemRevenue);
+            } else {
+                OrderItemProductInOrderRavanueAndStockResponseDTO itemDTO = new OrderItemProductInOrderRavanueAndStockResponseDTO();
+                itemDTO.setProductId(orderItem.getProduct().getId());
+                itemDTO.setProductName(orderItem.getProduct().getName());
+                itemDTO.setVendorName(orderItem.getProduct().getVendor() != null ? orderItem.getProduct().getVendor().getName() : null);
+                itemDTO.setProductQuantity(Objects.requireNonNullElse(orderItem.getProduct().getQuantity(), 0));
+                itemDTO.setProductTotalStock(Objects.requireNonNullElse(orderItem.getQuantity(), 0));
+                itemDTO.setProductPrice(Objects.requireNonNullElse(orderItem.getProduct().getPrice(), 0.0));
+                Double orderItemRevenue = Objects.requireNonNullElse(orderItem.getQuantity(), 0) * Objects.requireNonNullElse(orderItem.getProduct().getPrice(), 0.0);
+                itemDTO.setTotalRevenue(orderItemRevenue);
+                itemDTO.setOrderItemQuantity(Objects.requireNonNullElse(orderItem.getQuantity(), 0));
+                productMap.put(productKey, itemDTO);
+            }
+        }
+
+        result.addAll(productMap.values());
+        return result;
+    }
+
+    @Override
+    public List<OrderItemProductInOrderRavanueAndStockResponseDTO> getVendorProductRevenue(String vendorUUID) {
+        List<OrderItemModel> orderItems = orderItemRepository.findByProduct_Vendor_Vendoruuid(vendorUUID);
+        Map<Long, OrderItemProductInOrderRavanueAndStockResponseDTO> productMap = new HashMap<>();
+        for (OrderItemModel orderItem : orderItems) {
+            Long productKey = orderItem.getProduct().getId();
+            if (productMap.containsKey(productKey)) {
+                OrderItemProductInOrderRavanueAndStockResponseDTO itemDTO = productMap.get(productKey);
+                itemDTO.setTotalOrderRevenue(itemDTO.getTotalOrderRevenue() + (orderItem.getQuantity() * orderItem.getProduct().getPrice()));
+                itemDTO.setOrderItemQuantity(itemDTO.getOrderItemQuantity() + orderItem.getQuantity());
+                itemDTO.setTotalStockExchange(itemDTO.getTotalStockExchange() + (orderItem.getQuantity() * orderItem.getProduct().getQuantity()));
+            } else {
+                OrderItemProductInOrderRavanueAndStockResponseDTO itemDTO = new OrderItemProductInOrderRavanueAndStockResponseDTO();
+                itemDTO.setProductId(orderItem.getProduct().getId());
+                itemDTO.setProductName(orderItem.getProduct().getName());
+                itemDTO.setVendorName(orderItem.getProduct().getVendor() != null ? orderItem.getProduct().getVendor().getName() : null);
+                itemDTO.setProductQuantity(orderItem.getProduct().getQuantity());
+                itemDTO.setProductTotalStock(orderItem.getQuantity());
+                itemDTO.setProductPrice(orderItem.getProduct().getPrice());
+                Double orderItemRevenue = orderItem.getQuantity() * orderItem.getProduct().getPrice();
+                itemDTO.setTotalRevenue(orderItemRevenue);
+                itemDTO.setTotalOrderRevenue(orderItemRevenue);
+                itemDTO.setOrderItemQuantity(orderItem.getQuantity());
+                itemDTO.setTotalStockExchange(orderItem.getQuantity() * orderItem.getProduct().getQuantity());
+                productMap.put(productKey, itemDTO);
+            }
+        }
+        return new ArrayList<>(productMap.values());
+    }
+
+
+
+
+    @Override
+    public List<OrderModel> searchOrderItems(String keyword) {
+        if (StringUtils.hasText(keyword)) {
+            return orderRepository.findByOrderItemsProductVendorNameContainingIgnoreCaseOrOrderItemsProductNameContainingIgnoreCase(keyword, keyword);
+        } else {
+            return orderRepository.findAll();
+        }
+    }
+
+    @Override
+    public void deleteOrderById(Long id) {
+        Optional<OrderModel> optionalOrderModel = orderRepository.findById(id);
+        if (optionalOrderModel.isPresent()) {
+            orderRepository.deleteById(id);
+        } else {
+            throw new OrderNotFoundException("Order not found with ID: " + id);
+        }
+    }
+
+
+
+
+
 
 
 

@@ -18,4 +18,12 @@ public interface OrderItemRepository extends JpaRepository<OrderItemModel,Long> 
      * @return the list
      */
     List<OrderItemModel> findByProduct_Vendor_Id(Long vendorId);
+
+    List<OrderItemModel> findByProductId(Long productId);
+
+
+
+    List<OrderItemModel> findByProduct_Vendor_Vendoruuid(String vendorUUID);
+
+
 }

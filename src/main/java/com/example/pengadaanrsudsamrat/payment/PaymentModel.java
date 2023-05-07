@@ -29,4 +29,6 @@ public class PaymentModel {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private OrderModel order;
+
+
 }

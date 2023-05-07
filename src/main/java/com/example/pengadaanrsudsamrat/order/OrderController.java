@@ -1,9 +1,8 @@
 package com.example.pengadaanrsudsamrat.order;
 
-import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
+import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Order controller.
@@ -21,6 +21,7 @@ public class OrderController {
 
     private final OrderService orderService;
     private final ModelMapper modelMapper;
+
 
     /**
      * Instantiates a new Order controller.
@@ -124,6 +125,72 @@ public class OrderController {
         Page<OrderGroupByVendorResponseDTO> orders = orderService.getOrdersByVendorIdWithPagination(vendorId, page, size);
         return ResponseEntity.ok(orders);
     }
+
+    @GetMapping("/orders/items")
+    public ResponseEntity<Page<OrderItemInOrderResponseDTO>> getAllOrderItemsInOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "orderDate") String sortBy) {
+
+        Page<OrderItemInOrderResponseDTO> orderItems = orderService.getAllOrderItemsInOrders(page, size, sortBy);
+        return ResponseEntity.ok(orderItems);
+    }
+
+
+    @GetMapping("/orders/items/details")
+    public ResponseEntity<Page<OrderItemInOrderDetailResponseDTO>> getAllOrderItemDetails(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "orderDate") String sortBy) {
+
+        Page<OrderItemInOrderDetailResponseDTO> orderItems = orderService.getAllOrderItemsInOrderDetails(page, size, sortBy);
+        return ResponseEntity.ok().body(orderItems);
+    }
+
+    @GetMapping("/orders/items/product-stock")
+    public ResponseEntity<Page<OrderItemQuantityExchangeResponseDTO>> getAllOrderItemsWithProductStock(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy) {
+
+        Page<OrderItemQuantityExchangeResponseDTO> orderItemDTOPage = orderService.getAllOrderItemsWithProductStock(page, size, sortBy);
+
+        return ResponseEntity.ok().body(orderItemDTOPage);
+    }
+
+
+    @GetMapping("/revenue-and-stock")
+    public ResponseEntity<List<OrderItemProductInOrderRavanueAndStockResponseDTO>> getOrderItemProductInOrderRevenueAndStock(
+            @RequestParam(required = false) Long productId) {
+        List<OrderItemProductInOrderRavanueAndStockResponseDTO> responseDTOs = orderService.getOrderItemProductInOrderRevenueAndStock(productId);
+        if (responseDTOs == null || responseDTOs.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(responseDTOs);
+    }
+
+    @GetMapping("/{vendorUUID}/revenue")
+    public List<OrderItemProductInOrderRavanueAndStockResponseDTO> getVendorProductRevenue(@PathVariable String vendorUUID) {
+        return orderService.getVendorProductRevenue(vendorUUID);
+    }
+
+    @GetMapping("/orders/search")
+    public List<OrderResponseDTO> searchOrdersByKeyword(@RequestParam(required = false) String keyword) {
+        List<OrderModel> orderModels = orderService.searchOrderItems(keyword);
+        return orderModels.stream()
+                .map(order -> modelMapper.map(order, OrderResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) {
+        orderService.deleteOrderById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
 
 
 }

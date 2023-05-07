@@ -1,9 +1,7 @@
 package com.example.pengadaanrsudsamrat.order;
 
 
-import com.example.pengadaanrsudsamrat.order.DTO.OrderGroupByVendorResponseDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderRequestDTO;
-import com.example.pengadaanrsudsamrat.order.DTO.OrderResponseDTO;
+import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 import org.springframework.data.domain.Page;
 
@@ -76,7 +74,15 @@ public interface OrderService {
     Page<OrderGroupByVendorResponseDTO> getOrdersByVendorIdWithPagination(Long vendorId, int page, int size);
 
 
+    Page<OrderItemInOrderResponseDTO> getAllOrderItemsInOrders(int page, int size, String sortBy);
+    Page<OrderItemInOrderDetailResponseDTO> getAllOrderItemsInOrderDetails(int page, int size, String sortBy);
 
+    Page<OrderItemQuantityExchangeResponseDTO> getAllOrderItemsWithProductStock(int page, int size, String sortBy);
+    List<OrderItemProductInOrderRavanueAndStockResponseDTO> getOrderItemProductInOrderRevenueAndStock(Long productId);
+    List<OrderItemProductInOrderRavanueAndStockResponseDTO> getVendorProductRevenue(String vendorUUID);
+    List<OrderModel> searchOrderItems(String keyword);
+
+    void deleteOrderById(Long id);
     //OrderItemResponseDTO createOrderItem(OrderItemRequestDTO orderItemRequestDTO);
 }
 
