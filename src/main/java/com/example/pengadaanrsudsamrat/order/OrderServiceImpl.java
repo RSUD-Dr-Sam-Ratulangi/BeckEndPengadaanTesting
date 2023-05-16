@@ -148,58 +148,42 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO addOrderItemsToOrder(Long orderId, List<OrderItemRequestDTO> orderItems) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
-
         List<OrderItemModel> existingOrderItems = orderModel.getOrderItems();
         if (existingOrderItems == null) {
             existingOrderItems = new ArrayList<>();
         }
-
         for (OrderItemRequestDTO orderItemDTO : orderItems) {
             ProductModel productModel = productRepository.findById(orderItemDTO.getProductId())
                     .orElseThrow(EntityNotFoundException::new);
-
             int quantityToAdd = orderItemDTO.getQuantity();
-
             // Check if the product has enough stock
             if (productModel.getQuantity() < quantityToAdd) {
                 throw new NotEnoughStockException(productModel.getName());
             }
-
             // Update the product quantity and save it
             productModel.setQuantity(productModel.getQuantity() - quantityToAdd);
             productRepository.save(productModel);
-
             // Check if the order already contains the product
             boolean orderContainsProduct = false;
             for (OrderItemModel existingOrderItem : existingOrderItems) {
                 if (existingOrderItem.getProduct().equals(productModel)) {
                     existingOrderItem.setQuantity(existingOrderItem.getQuantity() + quantityToAdd);
-
-                    // Update the bid price if provided
-                    if (orderItemDTO.getBidPrice() != null) {
-                        existingOrderItem.setBidPrice(orderItemDTO.getBidPrice());
-                    } else {
-                        existingOrderItem.setBidPrice(productModel.getPrice()); // Set bid price as product price
-                    }
-
-                    existingOrderItem.setStatus(OrderItemModel.OrderItemStatus.PENDING); // Set status to PENDING
                     orderContainsProduct = true;
                     break;
                 }
             }
-
             // If the order doesn't contain the product, create a new OrderItem for it
             if (!orderContainsProduct) {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setProduct(productModel);
                 orderItemModel.setQuantity(quantityToAdd);
-                orderItemModel.setBidPrice(orderItemDTO.getBidPrice() != null ? orderItemDTO.getBidPrice() : productModel.getPrice()); // Set bid price as product price if not provided
                 orderItemModel.setStatus(OrderItemModel.OrderItemStatus.PENDING); // Set status to PENDING
+                // Set bid price as product price if not provided
+                orderItemModel.setBidPrice(orderItemDTO.getBidPrice() != null ? orderItemDTO.getBidPrice() : productModel.getPrice());
                 orderItemModel.setOrder(orderModel);
                 existingOrderItems.add(orderItemModel);
             }
         }
-
         orderModel.setOrderItems(existingOrderItems);
         OrderModel savedOrderModel = orderRepository.save(orderModel);
 
@@ -211,17 +195,14 @@ public class OrderServiceImpl implements OrderService {
         PaymentModel paymentModel = savedOrderModel.getPayment();
         if (paymentModel == null) {
             paymentModel = new PaymentModel();
-            paymentModel.setOrder(savedOrderModel); // Set the payment's order to the saved order
+            paymentModel.setOrder(savedOrderModel); // set the payment's order to the saved order
         }
         paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
         PaymentModel savedPaymentModel = paymentRepository.save(paymentModel);
-
         savedOrderModel.setPayment(savedPaymentModel);
         orderRepository.save(savedOrderModel);
-
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
-
 
 
 //add Update Order Item base on Bid
