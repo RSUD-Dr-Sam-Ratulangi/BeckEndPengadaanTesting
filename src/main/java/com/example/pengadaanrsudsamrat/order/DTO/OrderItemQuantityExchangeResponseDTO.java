@@ -1,6 +1,7 @@
 package com.example.pengadaanrsudsamrat.order.DTO;
 
 
+import com.example.pengadaanrsudsamrat.order.OrderModel;
 import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,5 @@ public class OrderItemQuantityExchangeResponseDTO {
     private int orderItemQuantity;
     private int productTotalStock;
     private LocalDateTime orderDate;
+    private OrderModel.OrderStatus status;
 }

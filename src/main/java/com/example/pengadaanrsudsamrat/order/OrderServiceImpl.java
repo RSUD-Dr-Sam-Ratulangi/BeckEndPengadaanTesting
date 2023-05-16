@@ -1,6 +1,7 @@
 package com.example.pengadaanrsudsamrat.order;
 
 import com.example.pengadaanrsudsamrat.UTIL.exception.NotEnoughStockException;
+import com.example.pengadaanrsudsamrat.UTIL.exception.NotFoundException;
 import com.example.pengadaanrsudsamrat.UTIL.exception.OrderNotFoundException;
 import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
@@ -64,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO createOrder(@Valid OrderRequestDTO orderRequestDTO) {
         OrderModel orderModel = new OrderModel();
         orderModel.setOrderDate(LocalDateTime.now());
+        orderModel.setStatus(OrderModel.OrderStatus.ORDER); // Set the initial status to "ORDER"
 
         OrderModel savedOrderModel = orderRepository.save(orderModel);
 
@@ -76,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
+
 
 
 
@@ -481,12 +484,20 @@ public class OrderServiceImpl implements OrderService {
                     orderItemDTO.setProduct(productDTO);
                 }
 
+                OrderModel.OrderStatus status = orderModel.getStatus();
+                if (status != null) {
+                    orderItemDTO.setStatus(status);
+                } else {
+                    orderItemDTO.setStatus(null); // Set status to null if it's null in the database
+                }
+
                 orderItemDTOList.add(orderItemDTO);
             }
         }
 
         return new PageImpl<>(orderItemDTOList, pageable, orderItemDTOList.size());
     }
+
 
 
 
@@ -517,6 +528,7 @@ public class OrderServiceImpl implements OrderService {
                 }
                 orderItemDTO.setOrderItemQuantity(orderItem.getQuantity());
                 orderItemDTO.setOrderDate(orderModel.getOrderDate());
+                orderItemDTO.setStatus(orderModel.getStatus());
                 orderItemDTOList.add(orderItemDTO);
             }
         }
@@ -619,6 +631,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public OrderResponseDTO updateOrderStatus(Long orderId, OrderModel.OrderStatus status) {
+        Optional<OrderModel> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            OrderModel orderModel = optionalOrder.get();
+            orderModel.setStatus(status);
+            OrderModel updatedOrder = orderRepository.save(orderModel);
+            return modelMapper.map(updatedOrder, OrderResponseDTO.class);
+        } else {
+            throw new NotFoundException("Order not found with ID: " + orderId);
+        }
+    }
 
 
 

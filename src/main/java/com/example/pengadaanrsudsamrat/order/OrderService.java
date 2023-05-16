@@ -85,6 +85,9 @@ public interface OrderService {
     void deleteOrderById(Long id);
 
     OrderResponseDTO updateOrderItemsInOrder(OrderItemUpdateInOrderRequestDTO updateRequestDTO);
+
+    OrderResponseDTO updateOrderStatus(Long orderId, OrderModel.OrderStatus status);
+
     //OrderItemResponseDTO createOrderItem(OrderItemRequestDTO orderItemRequestDTO);
 }
 

@@ -1,5 +1,6 @@
 package com.example.pengadaanrsudsamrat.order.DTO;
 
+import com.example.pengadaanrsudsamrat.order.OrderModel;
 import com.example.pengadaanrsudsamrat.products.DTO.ProductResponseDTO;
 import com.example.pengadaanrsudsamrat.vendor.DTO.VendorResponseDTO;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,5 @@ public class OrderItemInOrderDetailResponseDTO {
     private int orderItemQuantity;
     private BigDecimal amountPerItem;
     private LocalDateTime orderDate;
+    private OrderModel.OrderStatus status;
 }

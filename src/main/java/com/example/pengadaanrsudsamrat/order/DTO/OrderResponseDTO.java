@@ -1,5 +1,6 @@
 package com.example.pengadaanrsudsamrat.order.DTO;
 
+import com.example.pengadaanrsudsamrat.order.OrderModel;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemResponseDTO;
 import com.example.pengadaanrsudsamrat.payment.DTO.PaymentDTO;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class OrderResponseDTO {
     private LocalDateTime orderDate;
     private List<OrderItemResponseDTO> orderItems;
     private PaymentDTO payment;
+    private OrderModel.OrderStatus status;
 
     // constructors, getters, and setters
 
