@@ -1,5 +1,7 @@
 package com.example.pengadaanrsudsamrat.users.DTO;
 
+import com.example.pengadaanrsudsamrat.users.EmployeeModel;
+import com.example.pengadaanrsudsamrat.users.EmployeeModel.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,5 @@ public class CreateEmployeeRequestDTO {
     private String password;
     private String email;
     private String phoneNumber;
-
-
+    private EmployeeModel.Role role;
 }

@@ -15,6 +15,13 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class EmployeeModel {
 
+    public enum Role {
+        EMPLOYEE,
+        PP,
+        PPKOM,
+        PANPEN
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +41,9 @@ public class EmployeeModel {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "Role is mandatory")
+    private Role role;
 
     // Constructors, getters, and setters
 }

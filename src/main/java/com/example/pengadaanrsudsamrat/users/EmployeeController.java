@@ -7,11 +7,9 @@ import com.example.pengadaanrsudsamrat.users.DTO.EmployeeResponseDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -40,6 +38,12 @@ public class EmployeeController {
     public ResponseEntity<CreateEmployeeResponseDTO> createEmployee(@RequestBody CreateEmployeeRequestDTO createEmployeeRequestDTO) {
         CreateEmployeeResponseDTO createdEmployee = employeeService.createEmployee(createEmployeeRequestDTO);
         return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CreateEmployeeResponseDTO>> getAllEmployees() {
+        List<CreateEmployeeResponseDTO> employees = employeeService.getAllEmployees();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
 }
