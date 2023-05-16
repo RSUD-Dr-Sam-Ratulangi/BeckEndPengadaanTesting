@@ -15,7 +15,9 @@ public class OrderItemResponseDTO {
 
     private Long id;
     private int quantity;
+    private Double bidPrice;
     private ProductResponseDTO product;
+    private String status;
 
     // constructors, getters, and setters
 

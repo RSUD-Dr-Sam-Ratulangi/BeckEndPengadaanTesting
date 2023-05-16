@@ -27,6 +27,14 @@ public class OrderItemModel {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "bid_price")
+    private double bidPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private OrderItemStatus status; // Add the status field
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductModel product;
@@ -36,4 +44,10 @@ public class OrderItemModel {
     @JoinColumn(name = "order_id")
     private OrderModel order;
 
+
+    public enum OrderItemStatus {
+        PENDING,
+        REJECTED,
+        ACCEPTED
+    }
 }

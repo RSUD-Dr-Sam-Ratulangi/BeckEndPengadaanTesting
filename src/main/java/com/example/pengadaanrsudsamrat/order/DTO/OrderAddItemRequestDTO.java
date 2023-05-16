@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class OrderAddItemRequestDTO {
     private Long productId;
     private int quantity;
-
+    private double bidPrice;
 
 }
 

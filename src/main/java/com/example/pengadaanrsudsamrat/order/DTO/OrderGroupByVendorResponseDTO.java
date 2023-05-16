@@ -19,7 +19,11 @@ public class OrderGroupByVendorResponseDTO {
     private int quantity;
     private String productName;
     private String productUuid;
+    private double bidPrice;
+    private String status;
     private double price;
+
+
 
     // constructors, getters, and setters
 

@@ -4,6 +4,7 @@ import com.example.pengadaanrsudsamrat.UTIL.exception.NotEnoughStockException;
 import com.example.pengadaanrsudsamrat.UTIL.exception.OrderNotFoundException;
 import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemUpdateRequestDTO;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemRepository;
 import com.example.pengadaanrsudsamrat.payment.DTO.PaymentDTO;
@@ -170,6 +171,15 @@ public class OrderServiceImpl implements OrderService {
             for (OrderItemModel existingOrderItem : existingOrderItems) {
                 if (existingOrderItem.getProduct().equals(productModel)) {
                     existingOrderItem.setQuantity(existingOrderItem.getQuantity() + quantityToAdd);
+
+                    // Update the bid price if provided
+                    if (orderItemDTO.getBidPrice() != null) {
+                        existingOrderItem.setBidPrice(orderItemDTO.getBidPrice());
+                    } else {
+                        existingOrderItem.setBidPrice(productModel.getPrice()); // Set bid price as product price
+                    }
+
+                    existingOrderItem.setStatus(OrderItemModel.OrderItemStatus.PENDING); // Set status to PENDING
                     orderContainsProduct = true;
                     break;
                 }
@@ -180,6 +190,8 @@ public class OrderServiceImpl implements OrderService {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setProduct(productModel);
                 orderItemModel.setQuantity(quantityToAdd);
+                orderItemModel.setBidPrice(orderItemDTO.getBidPrice() != null ? orderItemDTO.getBidPrice() : productModel.getPrice()); // Set bid price as product price if not provided
+                orderItemModel.setStatus(OrderItemModel.OrderItemStatus.PENDING); // Set status to PENDING
                 orderItemModel.setOrder(orderModel);
                 existingOrderItems.add(orderItemModel);
             }
@@ -190,13 +202,13 @@ public class OrderServiceImpl implements OrderService {
 
         double totalAmount = 0.0;
         for (OrderItemModel orderItemModel : existingOrderItems) {
-            totalAmount += orderItemModel.getProduct().getPrice() * orderItemModel.getQuantity();
+            totalAmount += orderItemModel.getBidPrice() * orderItemModel.getQuantity();
         }
 
         PaymentModel paymentModel = savedOrderModel.getPayment();
         if (paymentModel == null) {
             paymentModel = new PaymentModel();
-            paymentModel.setOrder(savedOrderModel); // set the payment's order to the saved order
+            paymentModel.setOrder(savedOrderModel); // Set the payment's order to the saved order
         }
         paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
         PaymentModel savedPaymentModel = paymentRepository.save(paymentModel);
@@ -207,6 +219,72 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
 
+
+
+//add Update Order Item base on Bid
+
+    @Override
+    public OrderResponseDTO updateOrderItemsInOrder(OrderItemUpdateInOrderRequestDTO updateRequestDTO) {
+        Long orderId = updateRequestDTO.getOrderId();
+        List<OrderItemUpdateRequestDTO> updatedOrderItems = updateRequestDTO.getOrderItems();
+
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        List<OrderItemModel> existingOrderItems = orderModel.getOrderItems();
+        if (existingOrderItems == null) {
+            existingOrderItems = new ArrayList<>();
+        }
+
+        for (OrderItemUpdateRequestDTO updateItemDTO : updatedOrderItems) {
+            Long orderItemId = updateItemDTO.getOrderItemId();
+            BigDecimal updatedBidPrice = updateItemDTO.getBidPrice();
+            OrderItemModel.OrderItemStatus updatedStatus = updateItemDTO.getStatus();
+
+            // Find the order item to update
+            Optional<OrderItemModel> optionalOrderItem = existingOrderItems.stream()
+                    .filter(item -> item.getId().equals(orderItemId))
+                    .findFirst();
+
+            if (optionalOrderItem.isPresent()) {
+                OrderItemModel orderItemModel = optionalOrderItem.get();
+
+                // Update the bid price if provided
+                if (updatedBidPrice != null) {
+                    orderItemModel.setBidPrice(updatedBidPrice.doubleValue());
+                }
+
+                // Update the status if provided
+                if (updatedStatus != null) {
+                    // Automatically update status to "ACCEPTED" or "REJECTED"
+                    if (updatedStatus == OrderItemModel.OrderItemStatus.ACCEPTED) {
+                        orderItemModel.setStatus(updatedStatus);
+                    } else if (updatedStatus == OrderItemModel.OrderItemStatus.REJECTED) {
+                        orderItemModel.setStatus(updatedStatus);
+                    }
+                }
+            }
+        }
+
+        // Recalculate the total amount due for the order
+        double totalAmount = existingOrderItems.stream()
+                .mapToDouble(orderItemModel -> orderItemModel.getBidPrice() * orderItemModel.getQuantity())
+                .sum();
+
+        // Update the payment amount and save it
+        PaymentModel paymentModel = orderModel.getPayment();
+        if (paymentModel != null) {
+            paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
+            paymentRepository.save(paymentModel);
+        }
+
+        orderModel.setOrderItems(existingOrderItems);
+
+
+        OrderModel savedOrderModel = orderRepository.save(orderModel);
+
+        return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
+    }
 
 
 
@@ -290,8 +368,8 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderGroupByVendorResponseDTO> responseList = new ArrayList<>();
 
-        for(OrderModel order: orders) {
-            for(OrderItemModel item: order.getOrderItems()) {
+        for (OrderModel order : orders) {
+            for (OrderItemModel item : order.getOrderItems()) {
                 OrderGroupByVendorResponseDTO response = new OrderGroupByVendorResponseDTO();
                 response.setOrderId(order.getId());
                 response.setOrderDate(order.getOrderDate());
@@ -299,6 +377,12 @@ public class OrderServiceImpl implements OrderService {
                 response.setProductName(item.getProduct().getName());
                 response.setProductUuid(item.getProduct().getProductuuid());
                 response.setPrice(item.getProduct().getPrice());
+                response.setBidPrice(item.getBidPrice());
+                if (item.getStatus() != null) {
+                    response.setStatus(item.getStatus().toString());
+                } else {
+                    response.setStatus(null); // or set it to an appropriate default value
+                }
                 responseList.add(response);
             }
         }
@@ -309,6 +393,8 @@ public class OrderServiceImpl implements OrderService {
 
         return pageResponse;
     }
+
+
 
 
     //Filter all Order Item in Order

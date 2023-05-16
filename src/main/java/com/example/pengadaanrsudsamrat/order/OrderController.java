@@ -188,7 +188,19 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{orderId}/items")
+    public ResponseEntity<OrderResponseDTO> updateOrderItemsInOrder(
+            @PathVariable Long orderId,
+            @RequestBody OrderItemUpdateInOrderRequestDTO updateRequestDTO
+    ) {
+        // Set the orderId in the updateRequestDTO
+        updateRequestDTO.setOrderId(orderId);
 
+        // Call the service method to update the order items
+        OrderResponseDTO updatedOrder = orderService.updateOrderItemsInOrder(updateRequestDTO);
+
+        return ResponseEntity.ok(updatedOrder);
+    }
 
 
 

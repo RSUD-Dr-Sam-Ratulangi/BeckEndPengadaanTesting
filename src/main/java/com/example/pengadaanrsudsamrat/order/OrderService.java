@@ -83,6 +83,8 @@ public interface OrderService {
     List<OrderModel> searchOrderItems(String keyword);
 
     void deleteOrderById(Long id);
+
+    OrderResponseDTO updateOrderItemsInOrder(OrderItemUpdateInOrderRequestDTO updateRequestDTO);
     //OrderItemResponseDTO createOrderItem(OrderItemRequestDTO orderItemRequestDTO);
 }
 

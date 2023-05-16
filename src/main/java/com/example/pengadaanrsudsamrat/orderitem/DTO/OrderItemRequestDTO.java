@@ -14,7 +14,10 @@ public class OrderItemRequestDTO {
 
     private long orderItemid;
     private int quantity;
+    private Double bidPrice;
     private Long productId;
+    private String status;
+
 
     // constructors, getters, and setters
 
