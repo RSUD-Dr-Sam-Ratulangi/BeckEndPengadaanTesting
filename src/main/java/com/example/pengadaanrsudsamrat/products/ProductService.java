@@ -72,6 +72,6 @@ public interface ProductService {
      */
     Page<ProductResponseDTO> searchProducts(String keyword, int page, int size);
 
-
+    Page<ProductResponseDTO> filterProductsByCategoryName(String categoryName, int page, int size);
 }
 

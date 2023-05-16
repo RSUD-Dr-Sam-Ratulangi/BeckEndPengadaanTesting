@@ -43,4 +43,6 @@ public interface ProductRepository extends JpaRepository<ProductModel,Long> {
     @Query("SELECT p FROM ProductModel p WHERE CONCAT(p.name, p.description, p.vendor.name) LIKE %:keyword%")
     Page<ProductModel> search(@Param("keyword") String keyword, Pageable pageable);
 
+
+    Page<ProductModel> findByCategoriesName(String categoryName, Pageable pageable);
 }

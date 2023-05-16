@@ -1,5 +1,6 @@
 package com.example.pengadaanrsudsamrat.products;
 
+import com.example.pengadaanrsudsamrat.Category.CategoryModel;
 import com.example.pengadaanrsudsamrat.vendor.VendorModel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -44,6 +46,12 @@ public class ProductModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_id")
     private VendorModel vendor;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<CategoryModel> categories;
 
     @Column(name = "image_url")
     private String imageUrl;

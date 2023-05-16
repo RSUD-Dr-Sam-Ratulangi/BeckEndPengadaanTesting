@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 /**
  * The type Product request dto.
  */
@@ -17,4 +19,5 @@ public class ProductRequestDTO {
     private int quantity;
     private String vendorUuid;
     private String imageUrl;
+    private Set<Long> categoryIds;
 }

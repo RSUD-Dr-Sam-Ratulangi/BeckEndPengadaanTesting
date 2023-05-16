@@ -125,6 +125,14 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/filter-by-category")
+    public Page<ProductResponseDTO> filterProductsByCategory(
+            @RequestParam("categoryName") String categoryName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return productService.filterProductsByCategoryName(categoryName, page, size);
+    }
+
 
 
 }
