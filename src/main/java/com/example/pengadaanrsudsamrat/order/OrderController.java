@@ -36,9 +36,9 @@ public class OrderController {
 
 
     /**
-     * Create order order response dto.
+     * create order order response dto.
      *
-     * @param orderRequestDTO the order request dto
+     * @param orderrequestdto the order request dto
      * @return the order response dto
      */
     @PostMapping
