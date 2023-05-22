@@ -18,6 +18,7 @@ public class OrderItemResponseDTO {
     private Double bidPrice;
     private ProductResponseDTO product;
     private String status;
+    private double totalAmount;
 
     // constructors, getters, and setters
 

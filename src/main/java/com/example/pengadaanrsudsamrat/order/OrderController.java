@@ -209,4 +209,10 @@ public class OrderController {
         return ResponseEntity.ok(orderResponseDTO);
     }
 
+    @PutMapping("/{orderId}/{orderItemId}/payment")
+    public ResponseEntity<OrderResponseDTO> updatePaymentForOrder(@PathVariable Long orderId, @PathVariable Long orderItemId ) {
+        OrderResponseDTO updatedOrder = orderService.updatePaymentForOrder(orderId,orderItemId);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
 }

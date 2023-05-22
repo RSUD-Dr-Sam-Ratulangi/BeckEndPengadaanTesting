@@ -625,6 +625,41 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public OrderResponseDTO updatePaymentForOrder(Long orderId, Long orderItemId) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        OrderItemModel orderItem = orderModel.getOrderItems().stream()
+                .filter(item -> item.getId().equals(orderItemId))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+
+        // Check if the order item status is ACCEPTED
+        if (orderItem.getStatus() != OrderItemModel.OrderItemStatus.ACCEPTED) {
+            throw new IllegalArgumentException("Payment cannot be updated. The order item status is not ACCEPTED.");
+        }
+
+        // Calculate the total amount based on the quantity of the order item
+        double totalAmount = orderItem.getTotalAmount();
+
+        PaymentModel paymentModel = orderModel.getPayment();
+        if (paymentModel == null) {
+            paymentModel = new PaymentModel();
+            paymentModel.setOrder(orderModel);
+        }
+
+        paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
+
+        PaymentModel savedPaymentModel = paymentRepository.save(paymentModel);
+        orderModel.setPayment(savedPaymentModel);
+        orderRepository.save(orderModel);
+
+        OrderResponseDTO orderResponseDTO = modelMapper.map(orderModel, OrderResponseDTO.class);
+        orderResponseDTO.getPayment().setAmount(paymentModel.getAmount());
+
+        return orderResponseDTO;
+    }
 
 
 

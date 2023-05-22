@@ -45,10 +45,20 @@ public class OrderItemModel {
     private OrderModel order;
 
 
+    @Transient
+    private double totalAmount;
+
+
+
+
     public enum OrderItemStatus {
         PENDING,
         REJECTED,
         ACCEPTED,
         OFFER,
+    }
+
+    public double getTotalAmount() {
+        return bidPrice * quantity;
     }
 }
