@@ -48,6 +48,7 @@ public class OrderItemModel {
     public enum OrderItemStatus {
         PENDING,
         REJECTED,
-        ACCEPTED
+        ACCEPTED,
+        OFFER,
     }
 }

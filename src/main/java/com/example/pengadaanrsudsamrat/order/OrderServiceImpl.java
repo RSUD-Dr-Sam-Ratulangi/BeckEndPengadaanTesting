@@ -239,14 +239,18 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 // Update the status if provided
+                // Update the status if provided
                 if (updatedStatus != null) {
-                    // Automatically update status to "ACCEPTED" or "REJECTED"
+                    // Automatically update status to "ACCEPTED," "REJECTED," or "OFFER"
                     if (updatedStatus == OrderItemModel.OrderItemStatus.ACCEPTED) {
                         orderItemModel.setStatus(updatedStatus);
                     } else if (updatedStatus == OrderItemModel.OrderItemStatus.REJECTED) {
                         orderItemModel.setStatus(updatedStatus);
+                    } else if (updatedStatus == OrderItemModel.OrderItemStatus.OFFER) {
+                        orderItemModel.setStatus(updatedStatus);
                     }
                 }
+
             }
         }
 
@@ -269,11 +273,6 @@ public class OrderServiceImpl implements OrderService {
 
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
-
-
-
-
-
 
     @Override
     public OrderResponseDTO getOrderById(Long orderId) {
