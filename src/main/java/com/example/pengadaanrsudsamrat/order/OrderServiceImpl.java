@@ -227,14 +227,11 @@ public class OrderServiceImpl implements OrderService {
             // Get the bidPrice from the updateRequestDTO
             BigDecimal bidPrice = updateRequestDTO.getBidPrice();
 
-            // Calculate totalAmount if bidPrice and quantity are available
-            double quantity = orderItemModel.getQuantity();
+            // Calculate totalAmount if bidPrice is available
             if (bidPrice != null) {
-                BigDecimal bidPriceBigDecimal = BigDecimal.valueOf(bidPrice.doubleValue());
-                BigDecimal quantityBigDecimal = BigDecimal.valueOf(quantity);
-                BigDecimal totalAmount = bidPriceBigDecimal.multiply(quantityBigDecimal);
+                BigDecimal totalAmount = bidPrice.multiply(BigDecimal.valueOf(orderItemModel.getQuantity()));
                 orderItemModel.setTotalAmount(totalAmount.doubleValue());
-                orderItemModel.getOrder().getPayment().setAmount(totalAmount);
+                orderModel.getPayment().setAmount(Util.calculateTotalAmount(existingOrderItems));
             }
 
             // Update the bid price if provided
@@ -255,15 +252,10 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
 
-                // Update payment amount if status changes or bidPrice or quantity changes
+                // Update payment amount if status changes or bidPrice changes
                 if (!Objects.equals(orderItemModel.getStatus(), updatedStatus) ||
-                        bidPrice != null || quantity != orderItemModel.getQuantity()) {
-                    BigDecimal updatedBidPrice = bidPrice != null ? BigDecimal.valueOf(bidPrice.doubleValue()) : BigDecimal.valueOf(orderItemModel.getBidPrice());
-                    BigDecimal updatedQuantity = BigDecimal.valueOf(orderItemModel.getQuantity());
-                    BigDecimal totalAmount = updatedBidPrice.multiply(updatedQuantity);
-
-                    orderItemModel.setTotalAmount(totalAmount.doubleValue());
-                    orderItemModel.getOrder().getPayment().setAmount(totalAmount);
+                        bidPrice != null) {
+                    orderModel.getPayment().setAmount(Util.calculateTotalAmount(existingOrderItems));
                 }
             }
         }
@@ -282,18 +274,17 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-
-
-
-
     @Override
     public OrderResponseDTO getOrderById(Long orderId) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        double totalAmount = 0.0;
+        BigDecimal totalAmount = BigDecimal.ZERO;
         for (OrderItemModel orderItemModel : orderModel.getOrderItems()) {
-            totalAmount += orderItemModel.getProduct().getPrice() * orderItemModel.getQuantity();
+            BigDecimal bidPrice = BigDecimal.valueOf(orderItemModel.getBidPrice());
+            BigDecimal quantity = BigDecimal.valueOf(orderItemModel.getQuantity());
+            BigDecimal itemTotalAmount = bidPrice.multiply(quantity);
+            totalAmount = totalAmount.add(itemTotalAmount);
         }
 
         PaymentModel paymentModel = orderModel.getPayment();
@@ -302,13 +293,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         PaymentDTO paymentDTO = modelMapper.map(paymentModel, PaymentDTO.class);
-        paymentDTO.setAmount(BigDecimal.valueOf(totalAmount));
+        paymentDTO.setAmount(totalAmount);
 
         OrderResponseDTO orderResponseDTO = modelMapper.map(orderModel, OrderResponseDTO.class);
         orderResponseDTO.setPayment(paymentDTO);
 
         return orderResponseDTO;
     }
+
 
 
     @Override
@@ -674,7 +666,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
+    private BigDecimal calculateTotalAmount(List<OrderItemModel> orderItems) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (OrderItemModel orderItem : orderItems) {
+            BigDecimal bidPrice = BigDecimal.valueOf(orderItem.getBidPrice());
+            BigDecimal quantity = BigDecimal.valueOf(orderItem.getQuantity());
+            BigDecimal itemTotalAmount = bidPrice.multiply(quantity);
+            totalAmount = totalAmount.add(itemTotalAmount);
+        }
+        return totalAmount;
+    }
 
 
 
