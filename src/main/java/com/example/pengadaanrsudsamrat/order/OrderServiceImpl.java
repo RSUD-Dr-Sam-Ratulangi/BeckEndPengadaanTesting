@@ -205,13 +205,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-//add Update Order Item base on Bid
-
     @Override
-    public OrderResponseDTO updateOrderItemsInOrder(OrderItemUpdateInOrderRequestDTO updateRequestDTO) {
-        Long orderId = updateRequestDTO.getOrderId();
-        List<OrderItemUpdateRequestDTO> updatedOrderItems = updateRequestDTO.getOrderItems();
-
+    public OrderResponseDTO updateOrderItemsInOrder(Long orderId, Long orderItemId, OrderItemUpdateRequestDTO updateRequestDTO) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -220,59 +215,76 @@ public class OrderServiceImpl implements OrderService {
             existingOrderItems = new ArrayList<>();
         }
 
-        for (OrderItemUpdateRequestDTO updateItemDTO : updatedOrderItems) {
-            Long orderItemId = updateItemDTO.getOrderItemId();
-            BigDecimal updatedBidPrice = updateItemDTO.getBidPrice();
-            OrderItemModel.OrderItemStatus updatedStatus = updateItemDTO.getStatus();
+        boolean hasOffer = false; // Flag to track if any order item has an "OFFER" status
 
-            // Find the order item to update
-            Optional<OrderItemModel> optionalOrderItem = existingOrderItems.stream()
-                    .filter(item -> item.getId().equals(orderItemId))
-                    .findFirst();
+        Optional<OrderItemModel> optionalOrderItem = existingOrderItems.stream()
+                .filter(item -> item.getId().equals(orderItemId))
+                .findFirst();
 
-            if (optionalOrderItem.isPresent()) {
-                OrderItemModel orderItemModel = optionalOrderItem.get();
+        if (optionalOrderItem.isPresent()) {
+            OrderItemModel orderItemModel = optionalOrderItem.get();
 
-                // Update the bid price if provided
-                if (updatedBidPrice != null) {
-                    orderItemModel.setBidPrice(updatedBidPrice.doubleValue());
-                }
+            // Get the bidPrice from the updateRequestDTO
+            BigDecimal bidPrice = updateRequestDTO.getBidPrice();
 
-                // Update the status if provided
-                // Update the status if provided
-                if (updatedStatus != null) {
-                    // Automatically update status to "ACCEPTED," "REJECTED," or "OFFER"
-                    if (updatedStatus == OrderItemModel.OrderItemStatus.ACCEPTED) {
-                        orderItemModel.setStatus(updatedStatus);
-                    } else if (updatedStatus == OrderItemModel.OrderItemStatus.REJECTED) {
-                        orderItemModel.setStatus(updatedStatus);
-                    } else if (updatedStatus == OrderItemModel.OrderItemStatus.OFFER) {
-                        orderItemModel.setStatus(updatedStatus);
+            // Calculate totalAmount if bidPrice and quantity are available
+            double quantity = orderItemModel.getQuantity();
+            if (bidPrice != null) {
+                BigDecimal bidPriceBigDecimal = BigDecimal.valueOf(bidPrice.doubleValue());
+                BigDecimal quantityBigDecimal = BigDecimal.valueOf(quantity);
+                BigDecimal totalAmount = bidPriceBigDecimal.multiply(quantityBigDecimal);
+                orderItemModel.setTotalAmount(totalAmount.doubleValue());
+                orderItemModel.getOrder().getPayment().setAmount(totalAmount);
+            }
+
+            // Update the bid price if provided
+            if (bidPrice != null) {
+                orderItemModel.setBidPrice(bidPrice.doubleValue());
+            }
+
+            // Update the status if provided
+            OrderItemModel.OrderItemStatus updatedStatus = updateRequestDTO.getStatus();
+            if (updatedStatus != null) {
+                // Automatically update status to "ACCEPTED," "REJECTED," or "OFFER"
+                if (updatedStatus == OrderItemModel.OrderItemStatus.ACCEPTED ||
+                        updatedStatus == OrderItemModel.OrderItemStatus.REJECTED ||
+                        updatedStatus == OrderItemModel.OrderItemStatus.OFFER) {
+                    orderItemModel.setStatus(updatedStatus);
+                    if (updatedStatus == OrderItemModel.OrderItemStatus.OFFER) {
+                        hasOffer = true; // Set the flag to true if the status is "OFFER"
                     }
                 }
 
+                // Update payment amount if status changes or bidPrice or quantity changes
+                if (!Objects.equals(orderItemModel.getStatus(), updatedStatus) ||
+                        bidPrice != null || quantity != orderItemModel.getQuantity()) {
+                    BigDecimal updatedBidPrice = bidPrice != null ? BigDecimal.valueOf(bidPrice.doubleValue()) : BigDecimal.valueOf(orderItemModel.getBidPrice());
+                    BigDecimal updatedQuantity = BigDecimal.valueOf(orderItemModel.getQuantity());
+                    BigDecimal totalAmount = updatedBidPrice.multiply(updatedQuantity);
+
+                    orderItemModel.setTotalAmount(totalAmount.doubleValue());
+                    orderItemModel.getOrder().getPayment().setAmount(totalAmount);
+                }
             }
         }
 
-        // Recalculate the total amount due for the order
-        double totalAmount = existingOrderItems.stream()
-                .mapToDouble(orderItemModel -> orderItemModel.getBidPrice() * orderItemModel.getQuantity())
-                .sum();
-
-        // Update the payment amount and save it
-        PaymentModel paymentModel = orderModel.getPayment();
-        if (paymentModel != null) {
-            paymentModel.setAmount(BigDecimal.valueOf(totalAmount));
-            paymentRepository.save(paymentModel);
+        // Update the order status to "NEGOTIATION" if any order item has an "OFFER" status
+        if (hasOffer) {
+            orderModel.setStatus(OrderModel.OrderStatus.NEGOTIATION);
         }
 
         orderModel.setOrderItems(existingOrderItems);
-
 
         OrderModel savedOrderModel = orderRepository.save(orderModel);
 
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
+
+
+
+
+
+
 
     @Override
     public OrderResponseDTO getOrderById(Long orderId) {

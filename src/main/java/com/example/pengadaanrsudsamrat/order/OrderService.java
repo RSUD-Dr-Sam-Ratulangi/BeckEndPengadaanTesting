@@ -3,6 +3,7 @@ package com.example.pengadaanrsudsamrat.order;
 
 import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 
 
@@ -84,7 +85,7 @@ public interface OrderService {
 
     void deleteOrderById(Long id);
 
-    OrderResponseDTO updateOrderItemsInOrder(OrderItemUpdateInOrderRequestDTO updateRequestDTO);
+    OrderResponseDTO updateOrderItemsInOrder(Long orderId, Long orderItemId, OrderItemUpdateRequestDTO updateRequestDTO);
 
     OrderResponseDTO updateOrderStatus(Long orderId, OrderModel.OrderStatus status);
     OrderResponseDTO updatePaymentForOrder(Long orderId, Long orderItemId);

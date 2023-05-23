@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +41,7 @@ public class OrderModel {
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = true)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
@@ -55,4 +56,13 @@ public class OrderModel {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private PaymentModel payment;
 
+    public void recalculateTotalAmount() {
+        double totalAmount = orderItems.stream()
+                .mapToDouble(OrderItemModel::getTotalAmount)
+                .sum();
+
+        if (payment != null) {
+            payment.setAmount(BigDecimal.valueOf(totalAmount));
+        }
+    }
 }

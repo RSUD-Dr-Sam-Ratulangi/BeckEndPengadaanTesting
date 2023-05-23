@@ -13,4 +13,6 @@ public interface EmployeeService {
     EmployeeResponseDTO login(EmployeeRequestDTO employeeRequestDTO);
     CreateEmployeeResponseDTO createEmployee(CreateEmployeeRequestDTO createEmployeeRequestDTO);
     List<CreateEmployeeResponseDTO> getAllEmployees();
+
+    CreateEmployeeResponseDTO getEmployeeById(Long id);
 }

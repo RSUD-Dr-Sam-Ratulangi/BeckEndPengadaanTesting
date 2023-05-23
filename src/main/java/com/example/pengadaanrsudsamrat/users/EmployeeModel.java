@@ -19,7 +19,8 @@ public class EmployeeModel {
         EMPLOYEE,
         PP,
         PPKOM,
-        PANPEN
+        PANPEN,
+        KEU
     }
 
     @Id

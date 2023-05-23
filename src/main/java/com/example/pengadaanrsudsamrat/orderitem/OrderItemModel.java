@@ -9,10 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 
-/**
- * The type Order item model.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,8 +30,7 @@ public class OrderItemModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private OrderItemStatus status; // Add the status field
-
+    private OrderItemStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -44,12 +41,8 @@ public class OrderItemModel {
     @JoinColumn(name = "order_id")
     private OrderModel order;
 
-
-    @Transient
-    private double totalAmount;
-
-
-
+    @Column(name = "total_amount") // Add the column annotation for totalAmount
+    private Double totalAmount; // Change the type to Double
 
     public enum OrderItemStatus {
         PENDING,
@@ -58,7 +51,9 @@ public class OrderItemModel {
         OFFER,
     }
 
-    public double getTotalAmount() {
-        return bidPrice * quantity;
-    }
+
+
+
+
+
 }

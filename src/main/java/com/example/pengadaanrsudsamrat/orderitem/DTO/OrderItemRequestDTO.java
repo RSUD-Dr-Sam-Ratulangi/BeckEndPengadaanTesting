@@ -12,13 +12,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderItemRequestDTO {
 
-    private long orderItemid;
+    private long orderItemId;
     private int quantity;
     private Double bidPrice;
     private Long productId;
     private String status;
 
+    // Add the totalAmount field
+    private Double totalAmount;
 
     // constructors, getters, and setters
 
+    // Calculate the totalAmount by multiplying bidPrice and quantity
+    public Double getTotalAmount() {
+        if (bidPrice != null && quantity > 0) {
+            return bidPrice * quantity;
+        } else {
+            return 0.0;
+        }
+    }
 }

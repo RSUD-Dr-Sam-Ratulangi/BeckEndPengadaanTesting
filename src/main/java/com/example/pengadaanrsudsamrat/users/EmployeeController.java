@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -45,6 +46,13 @@ public class EmployeeController {
         List<CreateEmployeeResponseDTO> employees = employeeService.getAllEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<CreateEmployeeResponseDTO> getEmployee(@PathVariable Long employeeId) {
+        CreateEmployeeResponseDTO employee = employeeService.getEmployeeById(employeeId);
+        return ResponseEntity.ok().body(employee);
+    }
+
 
 }
 

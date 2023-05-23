@@ -2,7 +2,7 @@ package com.example.pengadaanrsudsamrat.order;
 
 import com.example.pengadaanrsudsamrat.order.DTO.*;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
-import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
+import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemUpdateRequestDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +35,6 @@ public class OrderController {
     }
 
 
-    /**
-     * create order order response dto.
-     *
-     * @param orderrequestdto the order request dto
-     * @return the order response dto
-     */
     @PostMapping
     public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO) {
         OrderResponseDTO orderResponseDTO = orderService.createOrder(orderRequestDTO);
@@ -188,19 +182,18 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{orderId}/items")
+    @PutMapping("/{orderId}/items/{orderItemId}")
     public ResponseEntity<OrderResponseDTO> updateOrderItemsInOrder(
             @PathVariable Long orderId,
-            @RequestBody OrderItemUpdateInOrderRequestDTO updateRequestDTO
+            @PathVariable Long orderItemId,
+            @RequestBody OrderItemUpdateRequestDTO updateRequestDTO
     ) {
-        // Set the orderId in the updateRequestDTO
-        updateRequestDTO.setOrderId(orderId);
-
         // Call the service method to update the order items
-        OrderResponseDTO updatedOrder = orderService.updateOrderItemsInOrder(updateRequestDTO);
+        OrderResponseDTO updatedOrder = orderService.updateOrderItemsInOrder(orderId, orderItemId, updateRequestDTO);
 
         return ResponseEntity.ok(updatedOrder);
     }
+
 
 
     @PutMapping("/{orderId}/status")

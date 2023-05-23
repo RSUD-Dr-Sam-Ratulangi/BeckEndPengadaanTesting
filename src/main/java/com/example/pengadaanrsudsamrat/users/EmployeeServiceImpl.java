@@ -53,6 +53,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
+    @Override
+    public CreateEmployeeResponseDTO getEmployeeById(Long id) {
+        Optional<EmployeeModel> employeeModel = employeeRepository.findById(id);
+        return employeeModel.map(model -> modelMapper.map(model, CreateEmployeeResponseDTO.class))
+                .orElse(null);
+    }
+
+
+
 
 
 }
