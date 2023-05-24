@@ -1,9 +1,13 @@
 package com.example.pengadaanrsudsamrat.order;
 
+import com.example.pengadaanrsudsamrat.UTIL.LoggingRequestInterceptor;
 import com.example.pengadaanrsudsamrat.UTIL.exception.NotEnoughStockException;
 import com.example.pengadaanrsudsamrat.UTIL.exception.NotFoundException;
 import com.example.pengadaanrsudsamrat.UTIL.exception.OrderNotFoundException;
 import com.example.pengadaanrsudsamrat.order.DTO.*;
+import com.example.pengadaanrsudsamrat.order.ReportServiceDTO.BidExchangeHistoryRequestDTO;
+import com.example.pengadaanrsudsamrat.order.ReportServiceDTO.BidExchangeHistoryResponseDTO;
+import com.example.pengadaanrsudsamrat.order.ReportServiceDTO.BidItemDTO;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemRequestDTO;
 import com.example.pengadaanrsudsamrat.orderitem.DTO.OrderItemUpdateRequestDTO;
 import com.example.pengadaanrsudsamrat.orderitem.OrderItemModel;
@@ -20,8 +24,13 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -59,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
         this.paymentRepository = paymentRepository;
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
+
     }
 
     @Override
@@ -269,6 +279,52 @@ public class OrderServiceImpl implements OrderService {
 
         OrderModel savedOrderModel = orderRepository.save(orderModel);
 
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Map the updated response to the request DTO for the subsequent POST request
+        BidExchangeHistoryRequestDTO requestDTO = new BidExchangeHistoryRequestDTO();
+        requestDTO.setOrderId(savedOrderModel.getId());
+        requestDTO.setOrderDate(savedOrderModel.getOrderDate().toString());
+
+        List<BidItemDTO> bidItems = savedOrderModel.getOrderItems().stream()
+                .map(orderItem -> {
+                    BidItemDTO bidItemDTO = new BidItemDTO();
+                    bidItemDTO.setId(orderItem.getId());
+                    bidItemDTO.setProductName(orderItem.getProduct().getName());
+                    bidItemDTO.setOriginalPrice(orderItem.getProduct().getPrice());
+                    bidItemDTO.setBidPrice(orderItem.getBidPrice());
+                    bidItemDTO.setBidPriceChange(orderItem.getBidPrice() - orderItem.getProduct().getPrice());
+                    bidItemDTO.setStatus(orderItem.getStatus().toString());
+                    return bidItemDTO;
+                })
+                .collect(Collectors.toList());
+
+        requestDTO.setBidItems(bidItems);
+        requestDTO.setStatus(savedOrderModel.getStatus().toString());
+
+        // Save the updated order to the other Spring Boot backend endpoint
+        String otherEndpointUrl = "http://localhost:8090/api/bid-exchange/history"; // Replace with the actual URL of the other endpoint
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        // Create a request entity with the data from the response
+        HttpEntity<BidExchangeHistoryRequestDTO> requestEntity = new HttpEntity<>(requestDTO, headers);
+
+        // Make the HTTP POST request to the other endpoint
+        ResponseEntity<BidExchangeHistoryResponseDTO> responseEntity = restTemplate.exchange(
+                otherEndpointUrl,
+                HttpMethod.POST,
+                requestEntity,
+                BidExchangeHistoryResponseDTO.class
+        );
+
+        // Get the response body from the response entity
+        BidExchangeHistoryResponseDTO responseDTO = responseEntity.getBody();
+
+        // Map the response DTO back to the appropriate model or DTO if needed
+        // ...
+
+        // Return the updated order response
         return modelMapper.map(savedOrderModel, OrderResponseDTO.class);
     }
 

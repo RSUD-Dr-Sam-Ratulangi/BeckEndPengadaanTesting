@@ -119,6 +119,7 @@ public class OrderController {
         Page<OrderGroupByVendorResponseDTO> orders = orderService.getOrdersByVendorIdWithPagination(vendorId, page, size);
         return ResponseEntity.ok(orders);
     }
+
 //need to fix this
     @GetMapping("/orders/items")
     public ResponseEntity<Page<OrderItemInOrderResponseDTO>> getAllOrderItemsInOrders(
